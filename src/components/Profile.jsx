@@ -1,6 +1,7 @@
 // React version of the portfolio template with smooth scroll + fade-in effect + profile image
 import React, { useEffect, useRef, useState } from "react";
-import "../App.css";
+import "../css/Profile.css";
+
 import cv from "../docs/CV 2025.pdf";
 import profileImage from "../images/profile.jpg"; // 👈 add your image to src folder and name it profile.jpg
 
@@ -14,7 +15,10 @@ const skills = [
   "Angular",
   "API Integration",
   "Remote Work",
-  "Git"
+  "Git",
+  "Unity",
+  "React",
+  "Node.js"
 ];
 
 const projects = [
@@ -142,7 +146,7 @@ const startDrag = (e) => {
   }, []);
 
   return (
-    <div className="App">
+    <div className="blur-in">
       <nav className="navbar">
         <ul>
           <li><a href="#about" onClick={(e) => scrollToSection(e, "about")}>About</a></li>

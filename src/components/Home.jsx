@@ -1,39 +1,112 @@
-import React, { useEffect, useState } from 'react';
-import '../css/Home.css'; // นำเข้า CSS สำหรับ Component นี้
-import skyBackground from '../images/sky6.jpg'; // สมมติว่าคุณบันทึกภาพท้องฟ้าไว้ใน src/assets/sky.jpg
+// Home.jsx
+import React, { useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
+import "../css/Home.css";
 
-function Home() {
+const Home = () => {
+  const layersRef = useRef([]);
+  const cloudRefs = useRef([]);
+  const cloudWrapperRefs = useRef([]);
+  const cloudCount = 5;
+  const navigate = useNavigate();
+  const audioRef = useRef(null);
 
-const [displayText, setDisplayText] = useState("Welcome to");
-const [isVisible, setIsVisible] = useState(true)
-useEffect(() => {
-    const intervalId = setInterval(() => {
-        setIsVisible(false); // เริ่ม Fade Out
+  useEffect(() => {
+    let offset = 0;
 
-        setTimeout(() => {
-            setDisplayText(prevText =>
-                prevText === "Welcome to" ? "Nuchkamol Profile" : "Welcome to"
-            );
-            setIsVisible(true); // เริ่ม Fade In
-        }, 1000); // ระยะเวลา Fade Out + พัก (1 วินาที)
-    }, 4000); // เปลี่ยนข้อความทุก 4 วินาที
+    const move = () => {
+      offset += 1;
 
-    return () => clearInterval(intervalId); // Cleanup เมื่อ Component Unmount
-}, []);
+      layersRef.current.forEach((layer, index) => {
+        const speed = (index + 1) * 0.2;
+        if (layer) {
+          if (index === 0) {
+            const scale = 1 + offset * speed * 0.0012;
+            layer.style.transform = `translateY(-${offset * speed}px) scale(${scale})`;
+          } else {
+            layer.style.transform = `translateY(-${offset * speed}px)`;
+          }
+        }
+      });
 
-return (
-  <div className="home-container">
-    <div className="sky-base"></div> {/* ภาพท้องฟ้าพื้นฐานที่อยู่นิ่ง หรือเลื่อนช้าๆ */}
-    <div className="cloud-layer cloud-far"></div> {/* เมฆชั้นไกล */}
-    <div className="cloud-layer cloud-mid"></div> {/* เมฆชั้นกลาง */}
-    <div className="cloud-layer cloud-close"></div> {/* เมฆชั้นใกล้ */}
+      cloudRefs.current.forEach((cloud, index) => {
+        const speed = (index + 1) * 0.1;
+        if (cloud) {
+          cloud.style.transform = `translateY(${offset * speed}px)`;
+        }
+      });
 
-    <div className="text-container">
-        <h1 className="welcome-text">{displayText}</h1>
+      requestAnimationFrame(move);
+    };
+
+    move();
+
+    const timer = setTimeout(() => {
+      navigate('/profile');
+    }, 12000);
+
+    return () => clearTimeout(timer);
+  }, [navigate]);
+
+  const handleCloudHover = (idx) => {
+    const wrapper = cloudWrapperRefs.current[idx];
+    if (wrapper) {
+      const randomX = (Math.random() - 0.5) * 3000;
+      const randomY = (Math.random() - 0.5) * 3000;
+      wrapper.style.transition = 'transform 1s ease';
+      wrapper.style.transform = `translate(${randomX}px, ${randomY}px)`;
+      if (audioRef.current) {
+        audioRef.current.currentTime = 0;
+        audioRef.current.play();
+      }
+    }
+  };
+
+  return (
+    <div className="parallax-container">
+      <audio ref={audioRef} src="/sounds/whoosh.mp3" preload="auto" />
+
+      {["/images/sky-back.png","/images/sky-mid.png","/images/sky-front.png"].map((src, idx) => (
+        <div
+          key={idx}
+          ref={(el) => (layersRef.current[idx] = el)}
+          className="parallax-layer"
+          style={{
+            backgroundImage: `url(${src})`,
+            backgroundRepeat: 'repeat-y',
+            backgroundSize: idx === 2 ? '78%' : 'cover',
+            backgroundPosition: 'top'
+          }}
+        />
+      ))}
+
+      {[...Array(cloudCount)].map((_, idx) => (
+        <div
+          key={`cloud-wrapper-${idx}`}
+          ref={(el) => (cloudWrapperRefs.current[idx] = el)}
+          style={{
+            position: 'absolute',
+            top: `${Math.random() * 60 + 10}%`,
+            left: `${Math.random() * 80 + 10}%`,
+            transition: 'transform 0.3s ease',
+            cursor: 'pointer'
+          }}
+          onMouseEnter={() => handleCloudHover(idx)}
+        >
+          <img
+            ref={(el) => (cloudRefs.current[idx] = el)}
+            src="/images/cloud.png"
+            alt="cloud"
+            className="floating-cloud"
+            style={{
+              width: `${100 + Math.random() * 200}px`,
+              pointerEvents: 'none'
+            }}
+          />
+        </div>
+      ))}
     </div>
-</div>
-);
-
-}
+  );
+};
 
 export default Home;

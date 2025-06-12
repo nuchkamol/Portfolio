@@ -1,0 +1,121 @@
+.home-container {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden; 
+    perspective: 800px;
+}
+
+.sky-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('../images/sky6.jpg');
+    background-size: 150% 100%; /* ยังคงใช้เพื่อให้มีพื้นที่เลื่อน */
+    background-repeat: no-repeat;
+    background-position: 0 0; /* ตำแหน่งเริ่มต้น */
+    
+    /* *** การปรับปรุงสำหรับเอฟเฟกต์ "ลึกเข้าไป" *** */
+    animation: moveCloudsPerspective 30s linear infinite normal; /* เปลี่ยนชื่อ animation */
+    transform-origin: center center; /* จุดหมุน/ขยายจากกึ่งกลาง */
+}
+
+@keyframes moveCloudsPerspective {
+    0% {
+        background-position: 0% 0; /* เลื่อนซ้ายไปขวา */
+        transform: scale(1); /* ขนาดปกติ */
+    }
+    50% {
+        background-position: 100% 0; /* เลื่อนไปขวา */
+        transform: scale(1.1); /* ขยายใหญ่ขึ้นเล็กน้อย (เหมือนเคลื่อนเข้ามาใกล้) */
+    }
+    100% {
+        background-position: 0% 0; /* กลับมาซ้าย */
+        transform: scale(1); /* กลับขนาดปกติ */
+    }
+}
+
+/* ส่วนที่เหลือของ CSS เหมือนเดิม */
+.text-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+    /* ถ้าใช้ transform สำหรับ text-container แล้วต้องการ perspective
+       ควรตั้ง perspective ที่ parent ของมัน หรือที่ body/html
+    */
+    /* perspective: 800px; /* เพิ่ม perspective ที่นี่เพื่อให้ text-shadow 3D ทำงานดีขึ้น */
+}
+
+.text-container.fade-in {
+    opacity: 1;
+}
+
+.text-container.fade-out {
+    opacity: 0;
+}
+
+.welcome-text {
+    font-size: 3em;
+    font-weight: bold;
+    color: transparent;
+    background-image: linear-gradient(to right, #dda0dd, #ff69b4);
+    -webkit-background-clip: text;
+    background-clip: text;
+    text-shadow:
+        1px 1px 0px rgba(255, 255, 255, 0.7),
+        -1px -1px 0px rgba(0, 0, 0, 0.5),
+        2px 2px 5px rgba(0, 0, 0, 0.3);
+    letter-spacing: 2px;
+     transform: perspective(500px) rotateY(5deg) translateZ(20px);
+    /* หากต้องการให้ตัวอักษรเองมี 3D transform แบบลอย/จม: */
+    /* transform: perspective(500px) rotateY(5deg) translateZ(20px); */
+    /* แต่ถ้าต้องการแค่ "นูน" text-shadow ก็พอแล้ว */
+}
+
+/* ใน Home.css */
+.sky-base {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background-image: url('../images/sky6.jpg'); /* ภาพท้องฟ้าไม่มีเมฆ */
+    background-size: cover;
+    z-index: 1;
+}
+
+.cloud-layer {
+    position: absolute;
+    background-image: url('../images/cloud.png'); /* ภาพเมฆโปร่งใส */
+    background-size: contain; /* หรือ cover, หรือเป็น % ที่เหมาะสม */
+    background-repeat: no-repeat;
+    z-index: 2; /* หรือ 3, 4 ตามลำดับความลึก */
+    animation: moveCloudLayer 40s linear infinite alternate;
+}
+
+.cloud-far {
+    width: 200px; height: 100px; /* ขนาดเมฆ */
+    top: 10%; left: -50px;
+    animation-duration: 60s; /* เคลื่อนที่ช้าๆ */
+    opacity: 0.7;
+}
+.cloud-mid {
+    width: 300px; height: 150px;
+    top: 40%; right: -80px;
+    animation-duration: 40s; /* เคลื่อนที่ปานกลาง */
+    opacity: 0.8;
+}
+.cloud-close {
+    width: 400px; height: 200px;
+    top: 70%; left: -100px;
+    animation-duration: 25s; /* เคลื่อนที่เร็ว */
+    opacity: 0.9;
+}
+
+@keyframes moveCloudLayer {
+    0% { transform: translateX(0) scale(1); }
+    100% { transform: translateX(calc(100vw + 200px)) scale(1.05); } /* เลื่อนและขยายเล็กน้อย */
+}

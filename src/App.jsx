@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import Home from './components/Home';
 import NotFound from './components/NotFound'; // สำหรับหน้าไม่พบ
 import Profile from './components/Profile'; 
+
 function App() {
   return (
     <Router>
@@ -25,6 +26,7 @@ function App() {
         <Route path="/Profile" element={<Profile />} />
         {/* Route สำหรับหน้าไม่พบ (ต้องอยู่ล่างสุด) */}
         <Route path="*" element={<NotFound />} />
+   
       </Routes>
     </Router>
   );

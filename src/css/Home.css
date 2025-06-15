@@ -59,3 +59,50 @@
   75%  { transform: rotate(-5deg); }
   100% { transform: rotate(0deg); }
 }
+
+.zoom-layer-container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  z-index: 1;
+}
+
+.zoom-fade-old,
+.zoom-fade-new {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-repeat: repeat-y;
+  background-size: 100% auto;
+  background-position: top;
+  background-attachment: scroll;
+}
+
+/* Old one fades out */
+.zoom-fade-old {
+  transition: transform 2s ease-in-out, opacity 2s ease-in-out, filter 2s ease-in-out;
+  transform: scale(1);
+  opacity: 1;
+  z-index: 2;
+  will-change: transform;
+}
+
+.zoom-fade-old.hide {
+  transform: scale(1.05);
+  opacity: 0;
+  filter: blur(3px);
+}
+
+.zoom-fade-new {
+  opacity: 0;
+  transition: opacity 1.5s ease-in-out;
+  position: absolute;
+  top: 0;
+  left: 0;
+
+}
+
+.zoom-fade-new.show {
+  opacity: 1;
+}

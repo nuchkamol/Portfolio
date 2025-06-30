@@ -45,7 +45,11 @@
 .balloon-fixed:hover {
   animation: floatUpDown 1.5s ease-in-out infinite;
 }
-
+@media (max-width: 768px) {
+.balloon-fixed{
+    width: 50%; /* จอเล็ก ให้เล็กลงครึ่งนึง */
+  }
+}
 @keyframes floatUpDown {
   0%   { transform: translateY(0); }
   50%  { transform: translateY(-15px); }
@@ -73,9 +77,9 @@
   position: absolute;
   width: 100%;
   height: 100%;
-  background-repeat: repeat-y;
-  background-size: 100% auto;
-  background-position: top;
+  background-repeat: no-repeat;
+  background-size: contain; /* หรือ cover แล้วระวังตัดขอบ */
+  background-position: bottom center; /* ดึงแปลงผักมาล่าง */
   background-attachment: scroll;
 }
 
@@ -94,13 +98,27 @@
   filter: blur(3px);
 }
 
-.zoom-fade-new {
+/* .zoom-fade-new {
   opacity: 0;
   transition: opacity 1.5s ease-in-out;
   position: absolute;
   top: 0;
   left: 0;
+    background-size: contain;
+  background-repeat: no-repeat;
 
+} */
+
+.zoom-fade-new {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-repeat: no-repeat;
+  background-size: contain; /* หรือ cover แล้วดูผล */
+  background-position: bottom center; /* ดึงภาพให้ชิดล่าง */
+  background-attachment: scroll;
+  opacity: 0;
+  transition: opacity 1.5s ease-in-out;
 }
 
 .zoom-fade-new.show {

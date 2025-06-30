@@ -16,6 +16,19 @@ const balloonRef = useRef();
 const [zoomOut, setZoomOut] = useState(false);
 const [showNewSky, setShowNewSky] = useState(false);
 const [bgStep, setBgStep] = useState(1); // เริ่มที่ภาพแรก
+    const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+const bg1 = isMobile ? '/images/sky-back-new-1-vertical.png' : '/images/sky-back-new-1.png';
+const bg2 = isMobile ? '/images/sky-back-new-2-vertical.png' : '/images/sky-back-new-2.png';
+const bg3 = isMobile ? '/images/sky-back-new-3-vertical.png' : '/images/sky-back-new-3.png';
 
 
   useEffect(() => {
@@ -29,6 +42,14 @@ const [bgStep, setBgStep] = useState(1); // เริ่มที่ภาพแ
 
 
     let offset = 0;
+
+
+
+
+
+
+
+
 
     const move = () => {
       offset += 1;
@@ -68,18 +89,58 @@ const [bgStep, setBgStep] = useState(1); // เริ่มที่ภาพแ
   }, []);
 
 
+// const bgCommonStyle = {
+//   backgroundRepeat: 'repeat-y',
+//   backgroundSize: 'contain',
+//   backgroundPosition: 'center',
+//   backgroundAttachment: 'scroll',
+//   minHeight: '610vh',
+//   position: 'absolute',
+//   width: '100%',
+//   height: '100%',
+//   transition: 'opacity 1.5s ease-in-out',
+//   zIndex: 0 // <<< ต้องต่ำกว่ sky-back.png ก่อน จะแสดง new sky เมื่อ bgStep เปลี่ยนเท่านั้น
+// };
 const bgCommonStyle = {
-  backgroundRepeat: 'repeat-y',
-  backgroundSize: '100% auto',
-  backgroundPosition: 'top',
+  backgroundRepeat: 'no-repeat',
+  backgroundSize: 'cover',
+  backgroundPosition: 'bottom center',
   backgroundAttachment: 'scroll',
-  minHeight: '300vh',
+  minHeight: '0vh',
   position: 'absolute',
   width: '100%',
   height: '100%',
   transition: 'opacity 1.5s ease-in-out',
-  zIndex: 0 // <<< ต้องต่ำกว่ sky-back.png ก่อน จะแสดง new sky เมื่อ bgStep เปลี่ยนเท่านั้น
+  zIndex: 0
 };
+
+// const bgCommonStyle = {
+//   backgroundRepeat: 'no-repeat',
+//   backgroundSize: 'contain',
+//   backgroundPosition: 'bottom center',
+//   backgroundAttachment: 'scroll',
+//   minHeight: '300vh',
+//   position: 'absolute',
+//   width: '100%',
+//   height: '100%',
+//   transition: 'opacity 1.5s ease-in-out',
+//   zIndex: 0
+// };
+
+
+// const bgOtherStyle = {
+//   backgroundSize: 'contain',
+// backgroundRepeat: 'no-repeat',
+// backgroundPosition: 'bottom center',
+
+//   backgroundAttachment: 'scroll',
+//   minHeight: '300vh',
+//   position: 'absolute',
+//   width: '100%',
+//   height: '100%',
+//   transition: 'opacity 1.5s ease-in-out',
+//   zIndex: 0 // <<< ต้องต่ำกว่ sky-back.png ก่อน จะแสดง new sky เมื่อ bgStep เปลี่ยนเท่านั้น
+// };
 
 const moveBalloonToCenter = () => {
   const balloon = balloonRef.current;
@@ -181,12 +242,13 @@ setTimeout(() => setBgStep(3), 9000);
 
 <div className="zoom-layer-container">
   {/* BG 1 */}
+  
   <div
     className="zoom-fade-new"
     style={{
       ...bgCommonStyle,
-      backgroundImage: `url('/images/sky-back-new-1.png')`,
-     
+      // backgroundImage: `url('/images/sky-back-new-1.png')`,
+     backgroundImage: `url('${bg1}')`,
          opacity: bgStep === 1 ? 1 : 0,
     //display: bgStep === 1 ? 'block' : 'none',
     }}
@@ -197,7 +259,8 @@ setTimeout(() => setBgStep(3), 9000);
     className="zoom-fade-new"
     style={{
       ...bgCommonStyle,
-      backgroundImage: `url('/images/sky-back-new-2.png')`,
+
+         backgroundImage: `url('${bg2}')`,
   opacity: bgStep === 2 ? 1 : 0,
    // display: bgStep === 2 ? 'block' : 'none',
     }}
@@ -208,7 +271,7 @@ setTimeout(() => setBgStep(3), 9000);
     className="zoom-fade-new"
     style={{
       ...bgCommonStyle,
-      backgroundImage: `url('/images/sky-back-new-3.png')`,
+    backgroundImage: `url('${bg3}')`,
      opacity: bgStep === 3 ? 1 : 0,
     //display: bgStep === 3 ? 'block' : 'none',
     }}

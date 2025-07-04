@@ -16,8 +16,9 @@ const balloonRef = useRef();
 const [zoomOut, setZoomOut] = useState(false);
 const [showNewSky, setShowNewSky] = useState(false);
 const [bgStep, setBgStep] = useState(1); // เริ่มที่ภาพแรก
-    const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
-
+const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+const [fadeMidFront, setFadeMidFront] = useState(false);
+const [showBalloon, setShowBalloon] = useState(true);
 
   useEffect(() => {
     const handleResize = () => {
@@ -142,7 +143,12 @@ const bgCommonStyle = {
 //   zIndex: 0 // <<< ต้องต่ำกว่ sky-back.png ก่อน จะแสดง new sky เมื่อ bgStep เปลี่ยนเท่านั้น
 // };
 
+const balloonMoving = useRef(false);
 const moveBalloonToCenter = () => {
+
+    if (balloonMoving.current) return; // ถ้าเคลื่อนที่อยู่แล้ว ไม่ทำซ้ำ
+    balloonMoving.current = true; // ล็อคว่ากำลังวิ่งแล้ว
+
   const balloon = balloonRef.current;
   if (!balloon) return;
  // แกว่งเบาๆ ก่อน
@@ -198,7 +204,7 @@ const moveBalloonToCenter = () => {
 setZoomOut(true);
 setShowNewSky(true);
 setBgStep(1); // เฟด bg-1 หลังภาพเก่าหาย
-
+  setFadeMidFront(true); // ✅ เฟด mid/front เฉพาะตรงนี้
 // ❌ ปิดการคลิก
 balloon.style.pointerEvents = "none";
 
@@ -206,8 +212,13 @@ balloon.style.pointerEvents = "none";
 setTimeout(() => {
   balloon.style.transition = 'all 10s ease-in-out';
   balloon.style.left = '0%';
-  balloon.style.top = '40%';
+  balloon.style.bottom = '20%';
   balloon.style.transform = 'translate(0, 0) scale(0.4)';
+
+   setTimeout(() => {
+    setShowBalloon(false);
+  }, 10000); // เวลาตรงกับ animation
+
 }, 300);
 
 // ✅ เปลี่ยนพื้นหลังต่อ
@@ -314,6 +325,9 @@ setTimeout(() => setBgStep(3), 9000);
         position: 'absolute',
         width: '100%',
          height: '300vh',  
+             opacity: fadeMidFront ? 0 : 1, // ✅ เฟดได้ตรงนี้
+     transition: 'opacity 4s ease-in-out'
+
       }}
     />
   ))}
@@ -348,14 +362,38 @@ setTimeout(() => setBgStep(3), 9000);
 
  {/* บอลลูนอยู่นอกลูป parallax */}
  
-<img
+{/* <img
   src="/images/balloon.png"
   alt="Balloon"
   ref={balloonRef}
   className="balloon-fixed"
   onClick={moveBalloonToCenter}
-/>
-  
+/> */}
+  {showBalloon && (
+  <img
+    src="/images/balloon.png"
+    alt="Balloon"
+    ref={balloonRef}
+    className="balloon-fixed"
+    onClick={moveBalloonToCenter}
+  />
+)}
+
+{!showBalloon && (
+  <img
+    src="https://via.placeholder.com/150"
+    alt="KidTest"
+    style={{
+      position: 'fixed',
+      left: '50%',
+      bottom: '50%',
+      transform: 'translate(-50%, -50%)',
+    }}
+  />
+)}
+
+
+
     </div>
   );
 };

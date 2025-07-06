@@ -19,6 +19,7 @@ const [bgStep, setBgStep] = useState(1); // เริ่มที่ภาพแ
 const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 const [fadeMidFront, setFadeMidFront] = useState(false);
 const [showBalloon, setShowBalloon] = useState(true);
+const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     const handleResize = () => {
@@ -380,18 +381,175 @@ setTimeout(() => setBgStep(3), 9000);
 )}
 
 {!showBalloon && (
+  <>
+    <img
+      src="/images/doll.png"
+      alt="doll"
+      className="doll"
+      style={{
+        position: 'fixed',
+        left: '-15%',
+        bottom: '-30%',
+        transform: 'scale(0.1)',
+        zIndex:'9',
+        cursor:'pointer'
+      }}
+    />
+    <img
+      src="/images/dog.png"
+      alt="Dog"
+      className="dog"
+      style={{
+        position: 'fixed',
+        left: '-18%',
+        bottom: '-31%',
+        transform: 'scale(0.07)',
+         zIndex:'9',
+        cursor:'pointer'
+      }}
+    />
+<div
+  className="house"
+  onMouseEnter={() => setIsOpen(true)}
+  onMouseLeave={() => setIsOpen(false)}
+  style={{
+    position: 'fixed',
+ left: '50%',
+bottom: '30%',
+    transform: 'scale(1)',
+    zIndex: 9,
+    cursor: 'pointer',
+  }}
+>
   <img
-    src="https://via.placeholder.com/150"
-    alt="KidTest"
+    src="/images/home.png"
+    alt="home"
+    className="house-body"
     style={{
-      position: 'fixed',
-      left: '50%',
-      bottom: '50%',
-      transform: 'translate(-50%, -50%)',
+      display: 'block',
     }}
   />
-)}
 
+  <img
+    src="/images/door.png"
+    alt="door"
+    className="house-door"
+    style={{
+      position: 'absolute',
+      bottom: '70px',
+      left: '105px',
+      width: '60px',
+      transformOrigin: 'left center',
+      transform: isOpen ? 'rotateY(-110deg)' : 'rotateY(-5)',
+      transition: 'transform 0.5s ease',
+      height:'120px'
+    }}
+  />
+</div>
+
+     <img
+      src="/images/resume.png"
+      alt="resume"
+      className="resume"
+      style={{
+        position: 'fixed',
+        left: '65%',
+        bottom: '-38%',
+        transform: 'scale(0.1)',
+         zIndex:'9',
+        cursor:'pointer'
+      }}
+    />
+   <img
+      src="/images/vegetable.png"
+      alt="vegetable"
+      className="vegetable"
+      style={{
+        position: 'fixed',
+        left: '3%',
+        bottom: '-25%',
+        transform: 'scale(0.2)',
+         zIndex:'9',
+        cursor:'pointer'
+      }}
+       />
+
+          <img
+      src="/images/carot.png"
+      alt="carot"
+      className="carot"
+      style={{
+        position: 'fixed',
+        left: '20%',
+        bottom: '-35%',
+        transform: 'scale(0.2)',
+         zIndex:'9',
+        cursor:'pointer'
+      }}
+       />
+       <img
+      src="/images/swing.png"
+      alt="swing"
+      className="swing"
+      style={{
+        position: 'fixed',
+        left: '-30%',
+        bottom: '0%',
+        transform: 'scale(0.2)',
+         zIndex:'9',
+        cursor:'pointer'
+      }}
+    />
+
+
+       <img
+      src="/images/rabbit.png"
+      alt="rabbit"
+      className="rabbit"
+      style={{
+        position: 'fixed',
+        left: '4%',
+        bottom: '-65%',
+        transform: 'scale(0.05)',
+         zIndex:'9',
+        cursor:'pointer'
+
+      }}
+    />
+
+    
+       <img
+      src="/images/other-house.png"
+      alt="other-house"
+      className="other-house"
+      style={{
+        position: 'fixed',
+        left: '15%',
+        bottom: '30%',
+        transform: 'scale(0.15)',
+         zIndex:'9',
+        cursor:'pointer'
+
+      }}
+    />
+
+      <img
+      src="/images/cow.png"
+      alt="cow"
+      className="cow"
+      style={{
+        position: 'fixed',
+        left: '0%',
+        bottom: '15%',
+        transform: 'scale(0.15)',
+         zIndex:'9',
+        cursor:'pointer'
+
+      }}
+    />
+
+  </>
+)}
 
 
     </div>

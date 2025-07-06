@@ -124,3 +124,46 @@
 .zoom-fade-new.show {
   opacity: 1;
 }
+
+.home {
+ position: fixed;
+ left: 38%;
+bottom: -5%;
+transform: scale(0.4);
+z-index:9;
+cursor:pointer;
+
+}
+.house {
+  /* position: relative;
+  display: inline-block;
+  perspective: 800px; ให้มีมิติ */
+
+   position: fixed;
+ left: 38%;
+bottom: -5%;
+transform: scale(0.4);
+z-index:9;
+cursor:pointer;
+}
+
+.house-body {
+  display: block;
+  width: 400px; /* แล้วแต่ขนาดบ้าน */
+
+  
+}
+
+.house-door {
+  position: absolute;
+  bottom: 40px;  /* ปรับให้ประตูตรงช่อง */
+  left: 180px;
+  width: 60px;   /* ขนาดประตู */
+  height: auto;
+  transform-origin: left center; /* จุดหมุน: บานพับด้านซ้าย */
+  transition: transform 0.5s ease;
+}
+
+.house-door.open {
+  transform: rotateY(-100deg); /* หมุนออก */
+}

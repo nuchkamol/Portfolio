@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 
 import { useNavigate } from "react-router-dom";
 import "../css/Home.css";
-
+import HoverImage from '../js/HoverImage';
 const Home = () => {
   const layersRef = useRef([]);
   const cloudRefs = useRef([]);
@@ -20,6 +20,15 @@ const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 const [fadeMidFront, setFadeMidFront] = useState(false);
 const [showBalloon, setShowBalloon] = useState(true);
 const [isOpen, setIsOpen] = useState(false);
+const [cloudStyles, setCloudStyles] = useState(() =>
+  Array.from({ length: cloudCount }, () => ({
+    top: `${Math.random() * 60 + 10}%`,
+    left: `${Math.random() * 80 + 10}%`,
+    width: `${100 + Math.random() * 200}px`,
+  }))
+);
+
+const [hovered, setHovered] = useState(false);
 
   useEffect(() => {
     const handleResize = () => {
@@ -333,32 +342,29 @@ setTimeout(() => setBgStep(3), 9000);
     />
   ))}
 
-      {[...Array(cloudCount)].map((_, idx) => (
-        <div
-          key={`cloud-wrapper-${idx}`}
-          ref={(el) => (cloudWrapperRefs.current[idx] = el)}
-          style={{
-            position: 'absolute',
-            top: `${Math.random() * 60 + 10}%`,
-            left: `${Math.random() * 80 + 10}%`,
-            transition: 'transform 0.3s ease',
-            cursor: 'pointer',
-              zIndex: 10,
-          }}
-          onClick={() => handleCloudClick(idx)}
-        >
-          <img
-            ref={(el) => (cloudRefs.current[idx] = el)}
-            src="/images/cloud.png"
-            alt="cloud"
-            className="floating-cloud"
-            style={{
-              width: `${100 + Math.random() * 200}px`,
-     
-            }}
-          />
-        </div>
-      ))}
+    {cloudStyles.map((style, idx) => (
+  <div
+    key={`cloud-wrapper-${idx}`}
+    ref={(el) => (cloudWrapperRefs.current[idx] = el)}
+    style={{
+      position: 'absolute',
+      top: style.top,
+      left: style.left,
+      transition: 'transform 0.3s ease',
+      cursor: 'pointer',
+      zIndex: 10,
+    }}
+    onClick={() => handleCloudClick(idx)}
+  >
+    <img
+      ref={(el) => (cloudRefs.current[idx] = el)}
+      src="/images/cloud.png"
+      alt="cloud"
+      className="floating-cloud"
+      style={{ width: style.width }}
+    />
+  </div>
+))}
 
 
  {/* บอลลูนอยู่นอกลูป parallax */}
@@ -382,32 +388,41 @@ setTimeout(() => setBgStep(3), 9000);
 
 {!showBalloon && (
   <>
-    <img
-      src="/images/doll.png"
-      alt="doll"
-      className="doll"
-      style={{
-        position: 'fixed',
-        left: '-15%',
-        bottom: '-30%',
-        transform: 'scale(0.1)',
-        zIndex:'9',
-        cursor:'pointer'
-      }}
-    />
-    <img
-      src="/images/dog.png"
-      alt="Dog"
-      className="dog"
-      style={{
-        position: 'fixed',
-        left: '-18%',
-        bottom: '-31%',
-        transform: 'scale(0.07)',
-         zIndex:'9',
-        cursor:'pointer'
-      }}
-    />
+
+<HoverImage
+  normalSrc="/images/doll.png"
+  hoverSrc="/images/doll-hand.png"
+  alt="cow"
+  style={{
+    position: 'fixed',
+    left: '-1%',
+    bottom: '-2%',
+    width: '500px',
+    height: '500px',
+    transform: 'scale(0.2)',
+    zIndex: 9,
+    cursor: 'pointer',
+  }}
+/>
+
+<HoverImage
+  normalSrc="/images/dog.png"
+  hoverSrc="/images/dog-stand.png"
+  alt="dog"
+  style={{
+    position: 'fixed',
+    left: '-4%',
+    bottom: '-4%',
+    width: '500px',
+    height: '500px',
+    transform: 'scale(0.15)',
+    zIndex: 9,
+    cursor: 'pointer',
+  }}
+/>
+
+
+
 <div
   className="house"
   onMouseEnter={() => setIsOpen(true)}
@@ -440,7 +455,7 @@ bottom: '30%',
       left: '105px',
       width: '60px',
       transformOrigin: 'left center',
-      transform: isOpen ? 'rotateY(-110deg)' : 'rotateY(-5)',
+      transform: isOpen ? 'rotateY(-110deg)' : 'rotateY(20deg)',
       transition: 'transform 0.5s ease',
       height:'120px'
     }}
@@ -460,62 +475,65 @@ bottom: '30%',
         cursor:'pointer'
       }}
     />
-   <img
-      src="/images/vegetable.png"
-      alt="vegetable"
-      className="vegetable"
-      style={{
-        position: 'fixed',
-        left: '3%',
-        bottom: '-25%',
-        transform: 'scale(0.2)',
-         zIndex:'9',
-        cursor:'pointer'
-      }}
-       />
 
-          <img
-      src="/images/carot.png"
-      alt="carot"
-      className="carot"
-      style={{
-        position: 'fixed',
-        left: '20%',
-        bottom: '-35%',
-        transform: 'scale(0.2)',
-         zIndex:'9',
-        cursor:'pointer'
-      }}
-       />
-       <img
-      src="/images/swing.png"
-      alt="swing"
-      className="swing"
-      style={{
-        position: 'fixed',
-        left: '-30%',
+       <HoverImage
+  normalSrc="/images/vegetable.png"
+  hoverSrc="/images/vegetable-grow.png"
+  alt="vegetable"
+  style={{
+    position: 'fixed',
+        left: '25%',
         bottom: '0%',
-        transform: 'scale(0.2)',
-         zIndex:'9',
-        cursor:'pointer'
-      }}
-    />
+    width: '800px',
+    height: '500px',
+    transform: 'scale(0.4)',
+    zIndex: 9,
+    cursor: 'pointer',
+  }}
+/>
 
 
-       <img
-      src="/images/rabbit.png"
-      alt="rabbit"
-      className="rabbit"
-      style={{
-        position: 'fixed',
-        left: '4%',
-        bottom: '-65%',
-        transform: 'scale(0.05)',
-         zIndex:'9',
-        cursor:'pointer'
 
-      }}
-    />
+       <HoverImage
+  normalSrc="/images/carot-baby.png"
+  hoverSrc="/images/carot.png"
+  alt="carot"
+  style={{
+    position: 'fixed',
+        left: '38%',
+        bottom: '-8%',
+    width: '800px',
+    height: '500px',
+    transform: 'scale(0.4)',
+    zIndex: 9,
+    cursor: 'pointer',
+  }}
+/>
+
+<div className="swing-wrapper">
+  <img src="/images/swing-nochair.png" className="swing-frame" />
+
+  <div className="seat-wrapper">
+    <img src="/images/swingchair.png" className="swing-seat" />
+  </div>
+</div>
+
+
+<HoverImage
+  normalSrc="/images/rabbit.png"
+  hoverSrc="/images/rabbit-face.png"
+  alt="cow"
+  style={{
+    position: 'fixed',
+    left: '20%',
+    bottom: '10%',
+    width: '500px',
+    height: '500px',
+    transform: 'scale(0.1)',
+    zIndex: 9,
+    cursor: 'pointer',
+  }}
+/>
 
     
        <img
@@ -533,20 +551,22 @@ bottom: '30%',
       }}
     />
 
-      <img
-      src="/images/cow.png"
-      alt="cow"
-      className="cow"
-      style={{
-        position: 'fixed',
-        left: '0%',
-        bottom: '15%',
-        transform: 'scale(0.15)',
-         zIndex:'9',
-        cursor:'pointer'
+<HoverImage
+  normalSrc="/images/cow.png"
+  hoverSrc="/images/cow-face.png"
+  alt="cow"
+  style={{
+    position: 'fixed',
+    left: '10%',
+    bottom: '50%',
+    width: '500px',
+    height: '500px',
+    transform: 'scale(0.3)',
+    zIndex: 9,
+    cursor: 'pointer',
+  }}
+/>
 
-      }}
-    />
 
   </>
 )}

@@ -167,3 +167,45 @@ cursor:pointer;
 .house-door.open {
   transform: rotateY(-100deg); /* หมุนออก */
 }
+
+.swing-wrapper {
+  position: relative;
+  width: 250px;  /* ปรับตามขนาดรูป */
+    z-index: 9;
+    left: 6%;
+  bottom: -35%;  /* ปรับให้ที่นั่งอยู่ตรงจุดที่ต้องการ */
+}
+
+.swing-frame {
+  width: 100%;
+  display: block;
+ 
+}
+
+
+.swing-seat {
+  width: 250px;  /* ปรับตามขนาดรูปเก้าอี้ */
+    transform: translateX(-50%) scale(1.25);
+}
+.seat-wrapper {
+  position: absolute;
+  left: 75%;
+  bottom: 40%;
+  width: 100px;
+  z-index: 9;
+  transform-origin: top center;
+  transform: translateX(-50%) scale(1.25) rotate(0deg); /* 👈 ใส่ rotate(0deg) ตอนปกติ */
+}
+
+.swing-wrapper:hover .seat-wrapper {
+  animation: swing-rotate 1s ease-in-out infinite alternate;
+}
+
+@keyframes swing-rotate {
+  0%   { transform: translateX(-50%) scale(1.25) rotate(3deg); }
+  100% { transform: translateX(-50%) scale(1.25) rotate(-5deg); }
+}
+
+.swing-seat {
+  width: 100%; /* ให้พอดีกับ .seat-wrapper */
+}

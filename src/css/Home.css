@@ -209,3 +209,56 @@ cursor:pointer;
 .swing-seat {
   width: 100%; /* ให้พอดีกับ .seat-wrapper */
 }
+
+
+.dialog-box {
+  position: fixed;
+  bottom: 80px; /* หรือ top: ขึ้นอยู่กับวางไว้ตรงไหน */
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: white;
+  border: 2px solid #333;
+  border-radius: 12px;
+  padding: 12px 20px;
+  max-width: 300px;
+  font-family: 'Kanit', sans-serif;
+  font-size: 1rem;
+  animation: fadeInUp 0.5s ease;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  z-index: 9;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 20px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+.cute-button {
+  background-color: #ffd6e0;
+  border: 2px solid #ff8fab;
+  border-radius: 12px;
+  color: #5c0032;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-family: 'Kanit', sans-serif;
+  cursor: pointer;
+  box-shadow: 0 4px 0 #ff8fab;
+  transition: all 0.2s ease;
+}
+
+.cute-button:hover {
+  background-color: #ffc2d1;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 0 #ff8fab;
+}
+
+.cute-button:active {
+  transform: translateY(2px);
+  box-shadow: 0 2px 0 #ff8fab;
+}

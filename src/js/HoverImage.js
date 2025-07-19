@@ -1,20 +1,22 @@
-import { useState } from 'react';
-
-const HoverImage = ({ normalSrc, hoverSrc, style = {}, alt = '' }) => {
+import React, { useState } from 'react';
+const HoverImage = React.forwardRef(({ normalSrc, hoverSrc, alt, style, onClick, outerRef }, ref) => {
   const [hovered, setHovered] = useState(false);
 
   return (
     <div
+      ref={outerRef} // 👈 สำคัญ
       style={{
         position: 'relative',
         ...style,
       }}
+      onClick={onClick}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
       <img
         src={normalSrc}
         alt={alt}
+        ref={ref}
         style={{
           position: 'absolute',
           width: '100%',
@@ -36,6 +38,7 @@ const HoverImage = ({ normalSrc, hoverSrc, style = {}, alt = '' }) => {
       />
     </div>
   );
-};
+});
+
 
 export default HoverImage;

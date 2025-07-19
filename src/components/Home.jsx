@@ -1,9 +1,10 @@
 // Home.jsx
 import React, { useEffect, useRef, useState } from "react";
-
+import DialogBox from './Dialogbox';
 import { useNavigate } from "react-router-dom";
 import "../css/Home.css";
 import HoverImage from '../js/HoverImage';
+
 const Home = () => {
   const layersRef = useRef([]);
   const cloudRefs = useRef([]);
@@ -20,6 +21,15 @@ const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 const [fadeMidFront, setFadeMidFront] = useState(false);
 const [showBalloon, setShowBalloon] = useState(true);
 const [isOpen, setIsOpen] = useState(false);
+  const [showDialog, setShowDialog] = useState(false);
+const [hasReachedCow, setHasReachedCow] = useState(false);
+
+
+const dollImageRef = useRef(null);  
+  const dollRef = useRef(null);
+  const buttonRef = useRef(null);
+  const [startWalk, setStartWalk] = useState(false);
+
 const [cloudStyles, setCloudStyles] = useState(() =>
   Array.from({ length: cloudCount }, () => ({
     top: `${Math.random() * 60 + 10}%`,
@@ -99,7 +109,79 @@ const bg3 = isMobile ? '/images/sky-back-new-3-vertical.png' : '/images/sky-back
     // return () => clearTimeout(timer);
   }, []);
 
+const [imgSrc, setImgSrc] = useState("/images/doll.png");
+const [styledoll, setStyle] = useState({
+    position: 'fixed',
+    left: '-1%',
+    bottom: '-2%',
+    width: '500px',
+    height: '500px',
+    transform: 'scale(0.2)',
+    zIndex: 9,
+    cursor: 'pointer',
+    transition: 'transform 1s ease-out, left 1s ease-out, bottom 1s ease-out',
 
+transform: 'translate(0, 0) scale(0.2) translateZ(0)',
+  });
+
+useEffect(() => {
+  if (startWalk && !hasReachedCow && dollRef.current && buttonRef.current) {
+    setImgSrc("/images/dollwalk-back.gif");
+
+    const doll = dollRef.current;
+    const dollRect = doll.getBoundingClientRect();
+    const buttonRect = buttonRef.current.getBoundingClientRect();
+
+    const offset = -50; // ด้านขวาของปุ่ม
+    const targetX = buttonRect.right + offset;
+    const targetY = buttonRect.top + buttonRect.height / 2 - dollRect.height / 2;
+
+    const deltaX = targetX - dollRect.left;
+    const deltaY = targetY - dollRect.top;
+
+    // reset transform ก่อนเดิน
+    setStyle(prev => ({
+      ...prev,
+      transform: 'translate(0px, 0px) scale(1)',
+      transition: 'none',
+    }));
+
+    const handleTransitionEnd = () => {
+      setImgSrc('/images/doll-cow.png'); // เปลี่ยนเป็นยืนลูบวัว
+      setStartWalk(false);
+      setHasReachedCow(true); // ✅ เดินถึงแล้ว!
+      setShowDialog(true);
+      doll.removeEventListener('transitionend', handleTransitionEnd);
+    };
+
+    requestAnimationFrame(() => {
+      setStyle(prev => ({
+        ...prev,
+        transform: `translate(${deltaX}px, ${deltaY}px) scale(0.2)`,
+        transition: 'transform 4s ease-in-out',
+      }));
+
+      doll.addEventListener('transitionend', handleTransitionEnd);
+    });
+
+    return () => {
+      doll.removeEventListener('transitionend', handleTransitionEnd);
+    };
+  }
+}, [startWalk, hasReachedCow]);
+
+
+
+
+
+ const handleClick = () => {
+  if (!hasReachedCow) {
+    setStartWalk(true);
+  } else {
+    // กดซ้ำก็ไม่ทำอะไร หรือจะเปิด dialog ซ้ำก็ได้
+    setShowDialog(true);
+  }
+};
 // const bgCommonStyle = {
 //   backgroundRepeat: 'repeat-y',
 //   backgroundSize: 'contain',
@@ -227,6 +309,7 @@ setTimeout(() => {
 
    setTimeout(() => {
     setShowBalloon(false);
+     
   }, 10000); // เวลาตรงกับ animation
 
 }, 300);
@@ -256,6 +339,8 @@ setTimeout(() => setBgStep(3), 9000);
   sound.play();
     }
   };
+
+
 
   return (
     <div className="parallax-container">
@@ -386,24 +471,21 @@ setTimeout(() => setBgStep(3), 9000);
   />
 )}
 
-{!showBalloon && (
-  <>
 
 <HoverImage
-  normalSrc="/images/doll.png"
+  normalSrc={imgSrc}
   hoverSrc="/images/doll-hand.png"
   alt="cow"
   style={{
-    position: 'fixed',
-    left: '-1%',
-    bottom: '-2%',
-    width: '500px',
-    height: '500px',
-    transform: 'scale(0.2)',
-    zIndex: 9,
-    cursor: 'pointer',
+    ...styledoll,
+    visibility: showBalloon ? 'hidden' : 'visible', // 🔥 ซ่อนแบบยังอยู่ใน DOM
+    pointerEvents: showBalloon ? 'none' : 'auto',   // 🔥 ป้องกันการคลิกผิดตอนซ่อน
   }}
+    ref={dollImageRef}        // 👉 เฉพาะ img
+  outerRef={dollRef}        // 👉 ใช้ transition ที่ div
 />
+{!showBalloon && (
+  <>
 
 <HoverImage
   normalSrc="/images/dog.png"
@@ -540,6 +622,7 @@ bottom: '30%',
       src="/images/other-house.png"
       alt="other-house"
       className="other-house"
+      
       style={{
         position: 'fixed',
         left: '15%',
@@ -555,6 +638,8 @@ bottom: '30%',
   normalSrc="/images/cow.png"
   hoverSrc="/images/cow-face.png"
   alt="cow"
+  onClick={handleClick}
+  ref={buttonRef}
   style={{
     position: 'fixed',
     left: '10%',
@@ -565,12 +650,20 @@ bottom: '30%',
     zIndex: 9,
     cursor: 'pointer',
   }}
+
 />
 
 
   </>
 )}
 
+      {showDialog && (
+  <DialogBox
+ 
+    text="วัวตัวนี้น่ารักจังเลย~ 🐄 "
+    onClose={() => setShowDialog(false)}
+  />
+)}
 
     </div>
   );

@@ -9,19 +9,36 @@ import profileImage from "../images/profile.jpg"; // 👈 add your image to src 
 const skills = [
   ".NET Core",
   "C#",
+  "C++",
   "PHP",
   "SQL Server",
   "MySQL",
   "Angular",
-  "API Integration",
+  "API Integration Rest/Soap",
   "Remote Work",
   "Git",
   "Unity",
   "React",
-  "Node.js"
+  "Node.js",
+  "Database Oracle/MSSQL/mySQL",
+  "Captive Portal",
+  "Responsive",
+  "HTML5",
+  "CSS",
+  "JS",
+  "TypeScript"
+
+
+  
 ];
 
 const projects = [
+ 
+{
+  title: "Database Migration Tool",
+  tech: "C#, .NET WinForms, Oracle, SQL Server, MySQL",
+  desc: "Developed a custom database migration tool using C# WinForms to transfer data from Oracle to SQL Server and MySQL, supporting large-scale table conversion, data type mapping, and bulk operations with progress tracking and error handling."
+} ,
   {
     title: "PRCMS for BEC World",
     tech: ".NET Core, Angular, SQL Server",
@@ -31,7 +48,33 @@ const projects = [
     title: "WiFi Portal Redesign for AIS",
     tech: "Angular 8, Node.js, API Gateway",
     desc: "Revamped user interface and authentication flow for AIS WiFi Portal. Improved UX and reduced customer login issues by 40%."
-  }
+  },
+{
+  title: "Election US API",
+  tech: "C# (.NET Framework 4.0), WinForms application running as an API provider for the Graphic Viz Engine",
+  desc: "Developed the U.S. Election 2024 API by integrating data from AP News, delivering real-time results to a custom Graphic Viz Engine."
+},{
+  title: "Free SIM Online Registration",
+  tech: "C# MVC, Co-operated with Rabbit LINE Pay (LINE Company)",
+  desc: "Developed an online survey and free SIM registration system using C# MVC, in collaboration with the Rabbit LINE Pay team."
+},{
+  title: "E-Exam System for Chulalongkorn University",
+  tech: "VB.NET, Crystal Reports",
+  desc: "Developed a random examination system used at Chulalongkorn University, including an admin management interface and reporting module using Crystal Reports."
+},{
+  title: "Tax Refund Web System for Double A",
+  tech: "VB.NET, SAP Integration",
+  desc: "Developed a web-based tax refund system for Double A Company using VB.NET. The system calculates and exports tax data from SAP and submits it to the Customs Department."
+}
+,{
+  title: "VoIP Analysis & Verification System",
+  tech: "C++, PHP, Asterisk (Trixbox), Unix",
+  desc: "Developed a web application to analyze and verify the usability of a Voice over IP (VoIP) system by retrieving call data from Asterisk (Trixbox), using C++ and PHP on a Unix-based environment."
+}
+
+
+
+
 ];
 
 function scrollToSection(e, id) {
@@ -198,7 +241,7 @@ const startDrag = (e) => {
 
         <section id="contact">
           <h2>Contact</h2>
-          <p>Email: nuchkamol@example.com</p>
+          <p>Email: nuchkmun@hotmail.com</p>
           <p>
             LinkedIn: <a href="https://www.linkedin.com/in/nuchkamol-nutaman-930b332b5" target="_blank" rel="noreferrer">linkedin.com/in/nuchkamol-nutaman</a>
           </p>

@@ -2,6 +2,7 @@
   "name": "my-portfolio-kam",
   "version": "0.1.0",
   "private": true,
+  "homepage": ".",
   "dependencies": {
     "@react-spring/three": "^10.0.1",
     "@react-three/drei": "^10.2.0",

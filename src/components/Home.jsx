@@ -21,14 +21,83 @@ const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 const [fadeMidFront, setFadeMidFront] = useState(false);
 const [showBalloon, setShowBalloon] = useState(true);
 const [isOpen, setIsOpen] = useState(false);
-  const [showDialog, setShowDialog] = useState(false);
 const [hasReachedCow, setHasReachedCow] = useState(false);
+const [lastTargetIndex, setLastTargetIndex] = useState(null);
 
 
 const dollImageRef = useRef(null);  
   const dollRef = useRef(null);
-  const buttonRef = useRef(null);
-  const [startWalk, setStartWalk] = useState(false);
+  // const buttonRef = useRef(null);
+
+
+const buttonRefs = useRef([]);
+const [targetIndex, setTargetIndex] = useState(null);
+const [startWalk, setStartWalk] = useState(false);
+const [hasReachedAnimal, setHasReachedAnimal] = useState(false);
+const [imgSrc, setImgSrc] = useState("/images/doll.png");
+const [showDialog, setShowDialog] = useState(false);
+const [dialogText, setDialogText] = useState("");
+
+
+  const animals = [
+  {
+    name: "cow",
+    normalSrc: "/images/cow.png",
+    hoverSrc: "/images/cow-face.png",
+    resultImg: "/images/doll-cow.png",
+    dialog: "ลูบวัวแล้ว~ 🐄",
+    style: { left: "20%", bottom: "40%" ,
+             position: 'fixed',
+              width: '500px',
+              height: '500px',
+              transform: 'scale(0.3)',
+              zIndex: 9,
+              cursor: 'pointer',
+              visibility: showBalloon ? 'hidden' : 'visible', // 🔥 ซ่อนแบบยังอยู่ใน DOM
+              pointerEvents: showBalloon ? 'none' : 'auto',   // 🔥 ป้องกันการคลิกผิดตอนซ่อน
+
+    }
+  },
+  {
+    name: "rabbit",
+    normalSrc: "/images/rabbit.png",
+    hoverSrc: "/images/rabbit-face.png",
+    resultImg: "/images/doll-cow.png",
+    dialog: "กระต่ายน้อยยย~ ฉันเคยเลี้ยงกระต่าย กระต่ายเจ้าขี้เป็นเม็ดๆ และยังมีลูกเก่งอีกด้วย ^^",
+    style: { left: "20%", bottom: "10%",
+            position: 'fixed',
+            width: '500px',
+            height: '500px',
+            transform: 'scale(0.1)',
+            zIndex: 9,
+            cursor: 'pointer',
+              visibility: showBalloon ? 'hidden' : 'visible', // 🔥 ซ่อนแบบยังอยู่ใน DOM
+              pointerEvents: showBalloon ? 'none' : 'auto',   // 🔥 ป้องกันการคลิกผิดตอนซ่อน
+          
+     }
+  },
+  {
+    name: "vegetable",
+    normalSrc: "/images/vegetable.png",
+    hoverSrc: "/images/vegetable-grow.png",
+    resultImg: "/images/doll-cow.png",
+    dialog: "ลูบแมวแล้ว~ 🐱",
+    style: { left: "35%", bottom: "-16%" ,
+             position: 'fixed',
+             width: '800px',
+             height: '500px',
+             transform: 'scale(0.4)',
+             zIndex: 9,
+             cursor: 'pointer',
+             visibility: showBalloon ? 'hidden' : 'visible', // 🔥 ซ่อนแบบยังอยู่ใน DOM
+             pointerEvents: showBalloon ? 'none' : 'auto',   // 🔥 ป้องกันการคลิกผิดตอนซ่อน
+             transformOrigin: 'top left', // ✅ เพิ่มบรรทัดนี้
+    }
+  }
+];
+
+
+
 
 const [cloudStyles, setCloudStyles] = useState(() =>
   Array.from({ length: cloudCount }, () => ({
@@ -109,7 +178,7 @@ const bg3 = isMobile ? '/images/sky-back-new-3-vertical.png' : '/images/sky-back
     // return () => clearTimeout(timer);
   }, []);
 
-const [imgSrc, setImgSrc] = useState("/images/doll.png");
+
 const [styledoll, setStyle] = useState({
     position: 'fixed',
     left: '-1%',
@@ -124,32 +193,44 @@ const [styledoll, setStyle] = useState({
 transform: 'translate(0, 0) scale(0.2) translateZ(0)',
   });
 
+  function getTranslateX(transform) {
+  const match = /translate\((-?\d+(?:\.\d+)?)/.exec(transform);
+  return match ? parseFloat(match[1]) : 0;
+}
+
+function getTranslateY(transform) {
+  const match = /translate\([^,]+,\s*(-?\d+(?:\.\d+)?)/.exec(transform);
+  return match ? parseFloat(match[1]) : 0;
+}
+
+
 useEffect(() => {
-  if (startWalk && !hasReachedCow && dollRef.current && buttonRef.current) {
+  if (
+    startWalk &&
+    !hasReachedAnimal &&
+    dollRef.current &&
+    targetIndex !== null &&
+    buttonRefs.current[targetIndex]
+  ) {
     setImgSrc("/images/dollwalk-back.gif");
 
     const doll = dollRef.current;
     const dollRect = doll.getBoundingClientRect();
-    const buttonRect = buttonRef.current.getBoundingClientRect();
+    const buttonRect = buttonRefs.current[targetIndex].getBoundingClientRect();
 
-    const offset = -50; // ด้านขวาของปุ่ม
+    const offset = -50;
     const targetX = buttonRect.right + offset;
     const targetY = buttonRect.top + buttonRect.height / 2 - dollRect.height / 2;
 
+    // คำนวณ "ระยะที่ต้องขยับจากจุดปัจจุบัน"
     const deltaX = targetX - dollRect.left;
     const deltaY = targetY - dollRect.top;
 
-    // reset transform ก่อนเดิน
-    setStyle(prev => ({
-      ...prev,
-      transform: 'translate(0px, 0px) scale(1)',
-      transition: 'none',
-    }));
-
     const handleTransitionEnd = () => {
-      setImgSrc('/images/doll-cow.png'); // เปลี่ยนเป็นยืนลูบวัว
+      setImgSrc(animals[targetIndex].resultImg);
+      setDialogText(animals[targetIndex].dialog);
       setStartWalk(false);
-      setHasReachedCow(true); // ✅ เดินถึงแล้ว!
+      setHasReachedAnimal(true);
       setShowDialog(true);
       doll.removeEventListener('transitionend', handleTransitionEnd);
     };
@@ -157,7 +238,7 @@ useEffect(() => {
     requestAnimationFrame(() => {
       setStyle(prev => ({
         ...prev,
-        transform: `translate(${deltaX}px, ${deltaY}px) scale(0.2)`,
+        transform: `translate(${deltaX + getTranslateX(prev.transform)}px, ${deltaY + getTranslateY(prev.transform)}px) scale(0.2)`,
         transition: 'transform 4s ease-in-out',
       }));
 
@@ -168,20 +249,92 @@ useEffect(() => {
       doll.removeEventListener('transitionend', handleTransitionEnd);
     };
   }
-}, [startWalk, hasReachedCow]);
+}, [startWalk, hasReachedAnimal, targetIndex]);
 
 
+// useEffect(() => {
+//   if (startWalk && !hasReachedCow && dollRef.current && buttonRef.current) {
+//     setImgSrc("/images/dollwalk-back.gif");
+
+//     const doll = dollRef.current;
+//     const dollRect = doll.getBoundingClientRect();
+//     const buttonRect = buttonRef.current.getBoundingClientRect();
+
+//     const offset = -50; // ด้านขวาของปุ่ม
+//     const targetX = buttonRect.right + offset;
+//     const targetY = buttonRect.top + buttonRect.height / 2 - dollRect.height / 2;
+
+//     const deltaX = targetX - dollRect.left;
+//     const deltaY = targetY - dollRect.top;
+
+//     // reset transform ก่อนเดิน
+//     setStyle(prev => ({
+//       ...prev,
+//       transform: 'translate(0px, 0px) scale(1)',
+//       transition: 'none',
+//     }));
+
+//     const handleTransitionEnd = () => {
+//       setImgSrc('/images/doll-cow.png'); // เปลี่ยนเป็นยืนลูบวัว
+//       setStartWalk(false);
+//       setHasReachedCow(true); // ✅ เดินถึงแล้ว!
+//       setShowDialog(true);
+//       doll.removeEventListener('transitionend', handleTransitionEnd);
+//     };
+
+//     requestAnimationFrame(() => {
+//       setStyle(prev => ({
+//         ...prev,
+//         transform: `translate(${deltaX}px, ${deltaY}px) scale(0.2)`,
+//         transition: 'transform 4s ease-in-out',
+//       }));
+
+//       doll.addEventListener('transitionend', handleTransitionEnd);
+//     });
+
+//     return () => {
+//       doll.removeEventListener('transitionend', handleTransitionEnd);
+//     };
+//   }
+// }, [startWalk, hasReachedCow]);
 
 
+// const handleClick = (index) => {
+//   if (!hasReachedCow) {
 
- const handleClick = () => {
-  if (!hasReachedCow) {
-    setStartWalk(true);
-  } else {
-    // กดซ้ำก็ไม่ทำอะไร หรือจะเปิด dialog ซ้ำก็ได้
+//   setTargetIndex(index);
+//   setStartWalk(true);
+//   // setHasReachedAnimal(false);
+//   setShowDialog(false);
+//   } else {
+//     // กดซ้ำก็ไม่ทำอะไร หรือจะเปิด dialog ซ้ำก็ได้
+//     setShowDialog(true);
+//   }
+// };
+const handleTransitionEnd = () => {
+  setImgSrc(animals[targetIndex].resultImg);
+  setDialogText(animals[targetIndex].dialog);
+  setStartWalk(false);
+  setHasReachedAnimal(true);
+  setShowDialog(true);
+  dollRef.removeEventListener('transitionend', handleTransitionEnd);
+};
+
+const handleClick = (index) => {
+  if (index === lastTargetIndex && hasReachedAnimal) {
+    // ✅ กดเป้าหมายเดิมหลังจากเดินถึงแล้ว → แสดง dialog ซ้ำ
+    setDialogText(animals[index].dialog);
     setShowDialog(true);
+  } else {
+    // ✅ เป้าหมายใหม่ → เริ่มเดิน
+    setTargetIndex(index);
+    setLastTargetIndex(index); // จำเป้าหมายล่าสุดไว้
+    setStartWalk(true);
+    setHasReachedAnimal(false); // รีเซ็ตสถานะ
+    setShowDialog(false);
   }
 };
+
 // const bgCommonStyle = {
 //   backgroundRepeat: 'repeat-y',
 //   backgroundSize: 'contain',
@@ -453,6 +606,8 @@ setTimeout(() => setBgStep(3), 9000);
 
 
  {/* บอลลูนอยู่นอกลูป parallax */}
+
+ 
  
 {/* <img
   src="/images/balloon.png"
@@ -471,6 +626,20 @@ setTimeout(() => setBgStep(3), 9000);
   />
 )}
 
+{animals.map((animal, index) => (
+  <HoverImage
+    key={index}
+    ref={el => buttonRefs.current[index] = el}
+    normalSrc={animal.normalSrc}
+    hoverSrc={animal.hoverSrc}
+    alt={animal.name}
+    onClick={() => handleClick(index)} // ✅ เรียก handleClick
+
+    style={{
+      ...animal.style,
+    }}
+  />
+))}
 
 <HoverImage
   normalSrc={imgSrc}
@@ -558,7 +727,7 @@ bottom: '30%',
       }}
     />
 
-       <HoverImage
+       {/* <HoverImage
   normalSrc="/images/vegetable.png"
   hoverSrc="/images/vegetable-grow.png"
   alt="vegetable"
@@ -572,7 +741,7 @@ bottom: '30%',
     zIndex: 9,
     cursor: 'pointer',
   }}
-/>
+/> */}
 
 
 
@@ -601,10 +770,12 @@ bottom: '30%',
 </div>
 
 
-<HoverImage
+{/* <HoverImage
   normalSrc="/images/rabbit.png"
   hoverSrc="/images/rabbit-face.png"
-  alt="cow"
+  alt="rabbit"
+    onClick={handleClick}
+  ref={buttonRef}
   style={{
     position: 'fixed',
     left: '20%',
@@ -615,7 +786,7 @@ bottom: '30%',
     zIndex: 9,
     cursor: 'pointer',
   }}
-/>
+/> */}
 
     
        <img
@@ -634,7 +805,7 @@ bottom: '30%',
       }}
     />
 
-<HoverImage
+{/* <HoverImage
   normalSrc="/images/cow.png"
   hoverSrc="/images/cow-face.png"
   alt="cow"
@@ -651,16 +822,14 @@ bottom: '30%',
     cursor: 'pointer',
   }}
 
-/>
+/> */}
 
 
   </>
 )}
-
-      {showDialog && (
+{showDialog && (
   <DialogBox
- 
-    text="วัวตัวนี้น่ารักจังเลย~ 🐄 "
+    text={dialogText} // ✅ ใช้ข้อความที่ตั้งไว้ตอนเดินถึงเป้าหมาย
     onClose={() => setShowDialog(false)}
   />
 )}

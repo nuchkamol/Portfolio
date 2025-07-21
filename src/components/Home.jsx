@@ -46,6 +46,7 @@ const [dialogText, setDialogText] = useState("");
     hoverSrc: "/images/cow-face.png",
     resultImg: "/images/doll-cow.png",
     dialog: "ลูบวัวแล้ว~ 🐄",
+    position: "right", // 🟢 อยู่ด้านขวาของปุ่ม
     style: { left: "20%", bottom: "40%" ,
              position: 'fixed',
               width: '500px',
@@ -62,8 +63,9 @@ const [dialogText, setDialogText] = useState("");
     name: "rabbit",
     normalSrc: "/images/rabbit.png",
     hoverSrc: "/images/rabbit-face.png",
-    resultImg: "/images/doll-cow.png",
+    resultImg: "/images/doll-sit.png",
     dialog: "กระต่ายน้อยยย~ ฉันเคยเลี้ยงกระต่าย กระต่ายเจ้าขี้เป็นเม็ดๆ และยังมีลูกเก่งอีกด้วย ^^",
+    position: "left", 
     style: { left: "20%", bottom: "10%",
             position: 'fixed',
             width: '500px',
@@ -80,8 +82,9 @@ const [dialogText, setDialogText] = useState("");
     name: "vegetable",
     normalSrc: "/images/vegetable.png",
     hoverSrc: "/images/vegetable-grow.png",
-    resultImg: "/images/doll-cow.png",
+    resultImg: "/images/doll-sit.png",
     dialog: "ลูบแมวแล้ว~ 🐱",
+    position: "left", 
     style: { left: "35%", bottom: "-16%" ,
              position: 'fixed',
              width: '800px',
@@ -218,9 +221,19 @@ useEffect(() => {
     const dollRect = doll.getBoundingClientRect();
     const buttonRect = buttonRefs.current[targetIndex].getBoundingClientRect();
 
-    const offset = -50;
-    const targetX = buttonRect.right + offset;
-    const targetY = buttonRect.top + buttonRect.height / 2 - dollRect.height / 2;
+    let offset = -50;
+    let targetX = 0 , targetY=0;
+    if(animals[targetIndex].position  == "right"){
+
+         targetX = buttonRect.right + offset;
+         targetY = buttonRect.top + buttonRect.height / 2 - dollRect.height / 2;
+    }else{
+  offset = -30;
+       targetX = buttonRect.left - dollRect.width - offset;
+       targetY = buttonRect.top + buttonRect.height / 2 - dollRect.height / 2;
+
+    }
+
 
     // คำนวณ "ระยะที่ต้องขยับจากจุดปัจจุบัน"
     const deltaX = targetX - dollRect.left;

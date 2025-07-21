@@ -66,6 +66,7 @@ const [dialogText, setDialogText] = useState("");
     resultImg: "/images/doll-sit.png",
     dialog: "กระต่ายน้อยยย~ ฉันเคยเลี้ยงกระต่าย กระต่ายเจ้าขี้เป็นเม็ดๆ และยังมีลูกเก่งอีกด้วย ^^",
     position: "left", 
+
     style: { left: "20%", bottom: "10%",
             position: 'fixed',
             width: '500px',
@@ -215,11 +216,36 @@ useEffect(() => {
     targetIndex !== null &&
     buttonRefs.current[targetIndex]
   ) {
-    setImgSrc("/images/dollwalk-back.gif");
+   //setImgSrc("/images/dollwalk-back.gif");
 
     const doll = dollRef.current;
     const dollRect = doll.getBoundingClientRect();
     const buttonRect = buttonRefs.current[targetIndex].getBoundingClientRect();
+
+
+let deltaX = buttonRect.left - dollRect.left;
+let deltaY = buttonRect.top - dollRect.top;
+
+const angle = Math.atan2(deltaY, deltaX) * (180 / Math.PI); // แปลงเป็นองศา
+
+if (angle >= -22.5 && angle < 22.5) {
+  setImgSrc("/images/dollwalk-up-right.gif"); //ขวา
+} else if (angle >= 22.5 && angle < 67.5) {
+  setImgSrc("/images/dollwalk-down.gif");  //ล่างขวา
+} else if (angle >= 67.5 && angle < 112.5) {
+  setImgSrc("/images/dollwalk-down.gif"); //ล่าง
+} else if (angle >= 112.5 && angle < 157.5) {
+  setImgSrc("/images/dollwalk-down.gif"); //ล่างซ้าย
+} else if ((angle >= 157.5 && angle <= 180) || (angle >= -180 && angle < -157.5)) {
+  setImgSrc("/images/dollwalk-down.gif");//ซ้าย
+} else if (angle >= -157.5 && angle < -112.5) {
+  setImgSrc("/images/dollwalk-up-left.gif"); //บนซ้าย
+} else if (angle >= -112.5 && angle < -67.5) {
+  setImgSrc("/images/dollwalk-up-right.gif");//บน
+} else if (angle >= -67.5 && angle < -22.5) {
+  setImgSrc("/images/dollwalk-up-right.gif");//บนขวา
+}
+
 
     let offset = -50;
     let targetX = 0 , targetY=0;
@@ -236,8 +262,8 @@ useEffect(() => {
 
 
     // คำนวณ "ระยะที่ต้องขยับจากจุดปัจจุบัน"
-    const deltaX = targetX - dollRect.left;
-    const deltaY = targetY - dollRect.top;
+     deltaX = targetX - dollRect.left;
+     deltaY = targetY - dollRect.top;
 
     const handleTransitionEnd = () => {
       setImgSrc(animals[targetIndex].resultImg);

@@ -21,9 +21,9 @@ const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 const [fadeMidFront, setFadeMidFront] = useState(false);
 const [showBalloon, setShowBalloon] = useState(true);
 const [isOpen, setIsOpen] = useState(false);
-const [hasReachedCow, setHasReachedCow] = useState(false);
 const [lastTargetIndex, setLastTargetIndex] = useState(null);
 
+const containerRef = useRef(null);
 
 const dollImageRef = useRef(null);  
   const dollRef = useRef(null);
@@ -37,67 +37,58 @@ const [hasReachedAnimal, setHasReachedAnimal] = useState(false);
 const [imgSrc, setImgSrc] = useState("/images/doll.png");
 const [showDialog, setShowDialog] = useState(false);
 const [dialogText, setDialogText] = useState("");
+const [targetPos, setTargetPos] = useState({ x: 0, y: 0 });
 
 
   const animals = [
-  {
+ {
     name: "cow",
     normalSrc: "/images/cow.png",
     hoverSrc: "/images/cow-face.png",
     resultImg: "/images/doll-cow.png",
     dialog: "ลูบวัวแล้ว~ 🐄",
-    position: "right", // 🟢 อยู่ด้านขวาของปุ่ม
-    style: { left: "20%", bottom: "40%" ,
-             position: 'fixed',
-              width: '500px',
-              height: '500px',
-              transform: 'scale(0.3)',
-              zIndex: 9,
-              cursor: 'pointer',
-              visibility: showBalloon ? 'hidden' : 'visible', // 🔥 ซ่อนแบบยังอยู่ใน DOM
-              pointerEvents: showBalloon ? 'none' : 'auto',   // 🔥 ป้องกันการคลิกผิดตอนซ่อน
-
-    }
+    position: "right",
+    xPercent: 0.2,  // 20% ของความกว้าง container
+    yPercent: 0.5,  // 50% ของความสูง container (จากล่างขึ้นบน)
+    offsetX: -20,
+    offsetY: -50,
+    width:200,
+    height:200
   },
-  {
+   {
     name: "rabbit",
     normalSrc: "/images/rabbit.png",
     hoverSrc: "/images/rabbit-face.png",
     resultImg: "/images/doll-sit.png",
     dialog: "กระต่ายน้อยยย~ ฉันเคยเลี้ยงกระต่าย กระต่ายเจ้าขี้เป็นเม็ดๆ และยังมีลูกเก่งอีกด้วย ^^",
     position: "left", 
-
-    style: { left: "20%", bottom: "10%",
-            position: 'fixed',
-            width: '500px',
-            height: '500px',
-            transform: 'scale(0.1)',
-            zIndex: 9,
-            cursor: 'pointer',
-              visibility: showBalloon ? 'hidden' : 'visible', // 🔥 ซ่อนแบบยังอยู่ใน DOM
-              pointerEvents: showBalloon ? 'none' : 'auto',   // 🔥 ป้องกันการคลิกผิดตอนซ่อน
-          
-     }
+    xPercent: 0.3,  // 20% ของความกว้าง container
+    yPercent: 0.10,  // 50% ของความสูง container (จากล่างขึ้นบน)
+    offsetX: -20,
+    offsetY: 0,
+    width:90,
+    height:90
   },
-  {
+,
+   {
     name: "vegetable",
     normalSrc: "/images/vegetable.png",
     hoverSrc: "/images/vegetable-grow.png",
     resultImg: "/images/doll-sit.png",
     dialog: "ลูบแมวแล้ว~ 🐱",
     position: "left", 
-    style: { left: "35%", bottom: "-16%" ,
-             position: 'fixed',
-             width: '800px',
-             height: '500px',
-             transform: 'scale(0.4)',
-             zIndex: 9,
-             cursor: 'pointer',
-             visibility: showBalloon ? 'hidden' : 'visible', // 🔥 ซ่อนแบบยังอยู่ใน DOM
-             pointerEvents: showBalloon ? 'none' : 'auto',   // 🔥 ป้องกันการคลิกผิดตอนซ่อน
-             transformOrigin: 'top left', // ✅ เพิ่มบรรทัดนี้
-    }
-  }
+    xPercent: 0.4,  // 20% ของความกว้าง container
+    yPercent: 0.10,  // 50% ของความสูง container (จากล่างขึ้นบน)
+    offsetX: -20,
+    offsetY: -40,
+    width:300,
+    height:200
+  },{
+    name: "swing",
+    xPercent: 0.6,
+    yPercent: 0.4,
+    type: "swing",
+  },
 ];
 
 
@@ -133,22 +124,10 @@ const bg3 = isMobile ? '/images/sky-back-new-3-vertical.png' : '/images/sky-back
   img.src = '/images/sky-back-new-2.png';
   img.src = '/images/sky-back-new-3.png';
 
-
-
     let offset = 0;
-
-
-
-
-
-
-
-
 
     const move = () => {
       offset += 1;
-
-
 
 
       layersRef.current.forEach((layer, index) => {
@@ -208,70 +187,54 @@ function getTranslateY(transform) {
 }
 
 
+
+
 useEffect(() => {
-  if (
-    startWalk &&
-    !hasReachedAnimal &&
-    dollRef.current &&
-    targetIndex !== null &&
-    buttonRefs.current[targetIndex]
-  ) {
-   //setImgSrc("/images/dollwalk-back.gif");
+if (
+  startWalk &&
+  !hasReachedAnimal &&
+  dollRef.current &&
+  targetIndex !== null &&
+  buttonRefs.current[targetIndex]
+) {
+
 
     const doll = dollRef.current;
     const dollRect = doll.getBoundingClientRect();
-    const buttonRect = buttonRefs.current[targetIndex].getBoundingClientRect();
 
-
-let deltaX = buttonRect.left - dollRect.left;
-let deltaY = buttonRect.top - dollRect.top;
-
-const angle = Math.atan2(deltaY, deltaX) * (180 / Math.PI); // แปลงเป็นองศา
-
-if (angle >= -22.5 && angle < 22.5) {
-  setImgSrc("/images/dollwalk-up-right.gif"); //ขวา
-} else if (angle >= 22.5 && angle < 67.5) {
-  setImgSrc("/images/dollwalk-down.gif");  //ล่างขวา
-} else if (angle >= 67.5 && angle < 112.5) {
-  setImgSrc("/images/dollwalk-down.gif"); //ล่าง
-} else if (angle >= 112.5 && angle < 157.5) {
-  setImgSrc("/images/dollwalk-down.gif"); //ล่างซ้าย
-} else if ((angle >= 157.5 && angle <= 180) || (angle >= -180 && angle < -157.5)) {
-  setImgSrc("/images/dollwalk-down.gif");//ซ้าย
-} else if (angle >= -157.5 && angle < -112.5) {
-  setImgSrc("/images/dollwalk-up-left.gif"); //บนซ้าย
-} else if (angle >= -112.5 && angle < -67.5) {
-  setImgSrc("/images/dollwalk-up-right.gif");//บน
-} else if (angle >= -67.5 && angle < -22.5) {
-  setImgSrc("/images/dollwalk-up-right.gif");//บนขวา
-}
-
-
-    let offset = -50;
-    let targetX = 0 , targetY=0;
-    if(animals[targetIndex].position  == "right"){
-
-         targetX = buttonRect.right + offset;
-         targetY = buttonRect.top + buttonRect.height / 2 - dollRect.height / 2;
-    }else{
-  offset = -30;
-       targetX = buttonRect.left - dollRect.width - offset;
-       targetY = buttonRect.top + buttonRect.height / 2 - dollRect.height / 2;
-
+    const deltaX = targetPos.x - dollRect.left;
+    const deltaY = targetPos.y - dollRect.top;
+console.log('dollTop:', dollRect.top);
+console.log('targetY:', targetPos.y);
+console.log('deltaY:', deltaY);
+    // มุมทิศทาง
+    const angle = Math.atan2(deltaY, deltaX) * (180 / Math.PI);
+    if (angle >= -22.5 && angle < 22.5) {
+      setImgSrc("/images/dollwalk-up-right.gif");
+    } else if (angle >= 22.5 && angle < 67.5) {
+      setImgSrc("/images/dollwalk-down.gif");
+    } else if (angle >= 67.5 && angle < 112.5) {
+      setImgSrc("/images/dollwalk-down.gif");
+    } else if (angle >= 112.5 && angle < 157.5) {
+      setImgSrc("/images/dollwalk-down.gif");
+    } else if ((angle >= 157.5 && angle <= 180) || (angle >= -180 && angle < -157.5)) {
+      setImgSrc("/images/dollwalk-down.gif");
+    } else if (angle >= -157.5 && angle < -112.5) {
+      setImgSrc("/images/dollwalk-up-left.gif");
+    } else if (angle >= -112.5 && angle < -67.5) {
+      setImgSrc("/images/dollwalk-up-right.gif");
+    } else if (angle >= -67.5 && angle < -22.5) {
+      setImgSrc("/images/dollwalk-up-right.gif");
     }
-
-
-    // คำนวณ "ระยะที่ต้องขยับจากจุดปัจจุบัน"
-     deltaX = targetX - dollRect.left;
-     deltaY = targetY - dollRect.top;
 
     const handleTransitionEnd = () => {
       setImgSrc(animals[targetIndex].resultImg);
       setDialogText(animals[targetIndex].dialog);
       setStartWalk(false);
       setHasReachedAnimal(true);
+      setTargetIndex(null);
       setShowDialog(true);
-      doll.removeEventListener('transitionend', handleTransitionEnd);
+      doll.removeEventListener("transitionend", handleTransitionEnd);
     };
 
     requestAnimationFrame(() => {
@@ -281,14 +244,14 @@ if (angle >= -22.5 && angle < 22.5) {
         transition: 'transform 4s ease-in-out',
       }));
 
-      doll.addEventListener('transitionend', handleTransitionEnd);
+      doll.addEventListener("transitionend", handleTransitionEnd);
     });
 
     return () => {
-      doll.removeEventListener('transitionend', handleTransitionEnd);
+      doll.removeEventListener("transitionend", handleTransitionEnd);
     };
   }
-}, [startWalk, hasReachedAnimal, targetIndex]);
+}, [startWalk, hasReachedAnimal, targetIndex, targetPos]);
 
 
 // useEffect(() => {
@@ -359,20 +322,71 @@ const handleTransitionEnd = () => {
   dollRef.removeEventListener('transitionend', handleTransitionEnd);
 };
 
-const handleClick = (index) => {
-  if (index === lastTargetIndex && hasReachedAnimal) {
-    // ✅ กดเป้าหมายเดิมหลังจากเดินถึงแล้ว → แสดง dialog ซ้ำ
-    setDialogText(animals[index].dialog);
-    setShowDialog(true);
-  } else {
-    // ✅ เป้าหมายใหม่ → เริ่มเดิน
-    setTargetIndex(index);
-    setLastTargetIndex(index); // จำเป้าหมายล่าสุดไว้
-    setStartWalk(true);
-    setHasReachedAnimal(false); // รีเซ็ตสถานะ
-    setShowDialog(false);
-  }
+
+const getAbsolutePosition = (element) => {
+  const rect = element.getBoundingClientRect();
+  return {
+    x: rect.left + window.scrollX,
+    y: rect.top + window.scrollY,
+    width: rect.width,
+    height: rect.height
+  };
 };
+
+const handleClick = (index) => {
+  const animal = animals[index];
+  const doll = dollRef.current;
+  const targetEl = buttonRefs.current[index];
+
+  if (!doll || !targetEl) return;
+
+  const dollRect = doll.getBoundingClientRect();
+  const buttonRect = targetEl.getBoundingClientRect();
+
+  const offsetX = animal.offsetX ?? 0;
+  const offsetY = animal.offsetY ?? 0;
+
+  let targetX = 0, targetY = 0;
+
+  if (animal.position === "right") {
+    targetX = buttonRect.right + offsetX;
+    targetY = buttonRect.top + buttonRect.height / 2 - dollRect.height / 2 + offsetY;
+  } else {
+    targetX = buttonRect.left - dollRect.width + offsetX;
+    targetY = buttonRect.top + buttonRect.height / 2 - dollRect.height / 2 + offsetY;
+  }
+
+  // 👉 ถ้าเดินถึงแล้ว และกดซ้ำตัวเดิม
+  if (hasReachedAnimal && lastTargetIndex === index) {
+    setShowDialog(true);
+    return;
+  }
+
+  // 👉 ถ้ายังไม่ถึง หรือกดตัวใหม่
+  setTargetPos({ x: targetX, y: targetY });
+  setTargetIndex(index);
+  setLastTargetIndex(index);
+  setStartWalk(true);
+  setHasReachedAnimal(false);
+  setShowDialog(false);
+};
+
+
+
+// const handleClick = (index) => {
+//   if (index === lastTargetIndex && hasReachedAnimal) {
+//     // ✅ กดเป้าหมายเดิมหลังจากเดินถึงแล้ว → แสดง dialog ซ้ำ
+//     setDialogText(animals[index].dialog);
+//     setShowDialog(true);
+//   } else {
+//     // ✅ เป้าหมายใหม่ → เริ่มเดิน
+//     setTargetIndex(index);
+//     setLastTargetIndex(index); // จำเป้าหมายล่าสุดไว้
+//     setStartWalk(true);
+//     setHasReachedAnimal(false); // รีเซ็ตสถานะ
+//     setShowDialog(false);
+//   }
+// };
 
 // const bgCommonStyle = {
 //   backgroundRepeat: 'repeat-y',
@@ -665,20 +679,77 @@ setTimeout(() => setBgStep(3), 9000);
   />
 )}
 
-{animals.map((animal, index) => (
-  <HoverImage
-    key={index}
-    ref={el => buttonRefs.current[index] = el}
-    normalSrc={animal.normalSrc}
-    hoverSrc={animal.hoverSrc}
-    alt={animal.name}
-    onClick={() => handleClick(index)} // ✅ เรียก handleClick
 
-    style={{
-      ...animal.style,
-    }}
-  />
-))}
+
+<div     ref={containerRef} // ✅ เพิ่มตรงน
+         style={{ position: 'relative', width: '100%', height: '100%' }}>
+  {animals.map((animal, index) => {
+    const left = `${animal.xPercent * 100}%`;
+    const bottom = `${animal.yPercent * 100}%`;
+
+    // if (animal.type === "swing") {
+    //   return (
+    //     <div
+    //       key={index}
+    //       className="swing-wrapper"
+    //       style={{
+    //         position: 'absolute',
+    //         left,
+    //         bottom,
+    //         width: '300px',
+    //         height: '300px',
+    //         zIndex: 8,
+    //         cursor: showBalloon ? 'default' : 'pointer',
+    //         visibility: showBalloon ? 'hidden' : 'visible',
+    //         pointerEvents: showBalloon ? 'none' : 'auto',
+    //       }}
+    //     >
+    //       <img
+    //         src="/images/swing-nochair.png"
+    //         className="swing-frame"
+    //         style={{ width: '100%', height: '100%', position: 'absolute' }}
+    //       />
+    //       <div
+    //         className="seat-wrapper"
+    //         style={{ position: 'absolute', width: '100%', height: '100%' }}
+    //       >
+    //         <img
+    //           src="/images/swingchair.png"
+    //           className="swing-seat"
+    //           style={{ width: '100%', height: '100%' }}
+    //         />
+    //       </div>
+    //     </div>
+    //   );
+    // }
+
+    // กรณีเป็นสัตว์ทั่วไป
+    return (
+      <HoverImage
+        key={index}
+        ref={el => buttonRefs.current[index] = el}
+        normalSrc={animal.normalSrc}
+        hoverSrc={animal.hoverSrc}
+        alt={animal.name}
+        onClick={() => handleClick(index)}
+        style={{
+          position: 'absolute',
+          left,
+          bottom,
+          width: `${animal.width}px`,
+          height: `${animal.height}px`,
+          zIndex: 9,
+          cursor: showBalloon ? 'default' : 'pointer',
+          visibility: showBalloon ? 'hidden' : 'visible',
+          pointerEvents: showBalloon ? 'none' : 'auto',
+        }}
+      />
+    );
+  })}
+</div>
+
+
+
 
 <HoverImage
   normalSrc={imgSrc}
@@ -800,13 +871,7 @@ bottom: '30%',
   }}
 />
 
-<div className="swing-wrapper">
-  <img src="/images/swing-nochair.png" className="swing-frame" />
 
-  <div className="seat-wrapper">
-    <img src="/images/swingchair.png" className="swing-seat" />
-  </div>
-</div>
 
 
 {/* <HoverImage

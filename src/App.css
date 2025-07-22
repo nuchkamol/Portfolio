@@ -1,0 +1,18 @@
+@media (orientation: portrait) {
+  body::before {
+    content: "กรุณาหมุนจอเป็นแนวนอนเพื่อใช้งาน 😊";
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+    background: #fff;
+    color: #333;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    text-align: center;
+  }
+}

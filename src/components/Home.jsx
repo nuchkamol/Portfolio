@@ -38,7 +38,7 @@ const [imgSrc, setImgSrc] = useState("/images/doll.png");
 const [showDialog, setShowDialog] = useState(false);
 const [dialogText, setDialogText] = useState("");
 const [targetPos, setTargetPos] = useState({ x: 0, y: 0 });
-
+const [targetCenter, setTargetCenter] = useState({ x: 0, y: 0 });
 
   const animals = [
  {
@@ -49,9 +49,9 @@ const [targetPos, setTargetPos] = useState({ x: 0, y: 0 });
     dialog: "ลูบวัวแล้ว~ 🐄",
     position: "right",
     xPercent: 0.2,  // 20% ของความกว้าง container
-    yPercent: 0.5,  // 50% ของความสูง container (จากล่างขึ้นบน)
-    offsetX: -20,
-    offsetY: -50,
+    yPercent: 0.2,  // 50% ของความสูง container (จากล่างขึ้นบน)
+    offsetX: -400,
+    offsetY: -100,
     width:200,
     height:200
   },
@@ -63,10 +63,10 @@ const [targetPos, setTargetPos] = useState({ x: 0, y: 0 });
     dialog: "กระต่ายน้อยยย~ ฉันเคยเลี้ยงกระต่าย กระต่ายเจ้าขี้เป็นเม็ดๆ และยังมีลูกเก่งอีกด้วย ^^",
     position: "left", 
     xPercent: 0.3,  // 20% ของความกว้าง container
-    yPercent: 0.10,  // 50% ของความสูง container (จากล่างขึ้นบน)
-    offsetX: -20,
-    offsetY: 0,
-    width:90,
+    yPercent: 0.8,  // 50% ของความสูง container (จากล่างขึ้นบน)
+    offsetX: 0,
+    offsetY: -160,
+    width:60,
     height:90
   },
 ,
@@ -77,10 +77,10 @@ const [targetPos, setTargetPos] = useState({ x: 0, y: 0 });
     resultImg: "/images/doll-sit.png",
     dialog: "ลูบแมวแล้ว~ 🐱",
     position: "left", 
-    xPercent: 0.4,  // 20% ของความกว้าง container
-    yPercent: 0.10,  // 50% ของความสูง container (จากล่างขึ้นบน)
-    offsetX: -20,
-    offsetY: -40,
+    xPercent: 0.4,  
+    yPercent: 0.7,  
+    offsetX: 200,
+    offsetY: -100,
     width:300,
     height:200
   },{
@@ -161,20 +161,43 @@ const bg3 = isMobile ? '/images/sky-back-new-3-vertical.png' : '/images/sky-back
     // return () => clearTimeout(timer);
   }, []);
 
+// const [styledoll, setStyle] = useState({
+//   position: 'absolute', // สำคัญมาก!
+//   top: '0px',
+//   left: '0px',
+//   width: '500px',
+//   height: '500px',
+//   transform: 'scale(0.2)',
+//   zIndex: 9,
+//   cursor: 'pointer',
+//   transition: 'transform 4s ease-in-out',
+// });
 
 const [styledoll, setStyle] = useState({
-    position: 'fixed',
-    left: '-1%',
-    bottom: '-2%',
-    width: '500px',
-    height: '500px',
-    transform: 'scale(0.2)',
-    zIndex: 9,
-    cursor: 'pointer',
-    transition: 'transform 1s ease-out, left 1s ease-out, bottom 1s ease-out',
+  position: 'absolute',
+  left: '0px',
+  top: '200px',
+  width: '500px',
+  height: '500px',
+  transform: 'scale(0.2)', // ✅ ยืนซ้ายล่าง
+  zIndex: 9,
+  cursor: 'pointer',
+  transition: 'transform 4s ease-in-out',
+});
 
-transform: 'translate(0, 0) scale(0.2) translateZ(0)',
-  });
+// const [styledoll, setStyle] = useState({
+//     position: 'fixed',
+//     left: '-1%',
+//     bottom: '-2%',
+//     width: '500px',
+//     height: '500px',
+//     transform: 'scale(0.2)',
+//     zIndex: 9,
+//     cursor: 'pointer',
+//     transition: 'transform 1s ease-out, left 1s ease-out, bottom 1s ease-out',
+
+// transform: 'translate(0, 0) scale(0.2) translateZ(0)',
+//   });
 
   function getTranslateX(transform) {
   const match = /translate\((-?\d+(?:\.\d+)?)/.exec(transform);
@@ -189,44 +212,126 @@ function getTranslateY(transform) {
 
 
 
+// useEffect(() => {
+// if (
+//   startWalk &&
+//   !hasReachedAnimal &&
+//   dollRef.current &&
+//   targetIndex !== null &&
+//   buttonRefs.current[targetIndex]
+// ) {
+
+// const container = containerRef.current;
+// const doll = dollRef.current;
+// if (!container || !doll) return;
+
+// const containerRect = container.getBoundingClientRect();
+// const dollRect = doll.getBoundingClientRect();
+
+// // 1. หาตำแหน่งปัจจุบันของตุ๊กตาเทียบกับ container
+// const dollX = dollRect.left - containerRect.left;
+// const dollY = dollRect.top - containerRect.top;
+
+// // 2. targetPos ที่ถูกเซตไว้ก่อนหน้านี้ (จาก xPercent/yPercent) = พิกัดใน container เช่นกัน
+// const deltaX = targetPos.x - dollX;
+// const deltaY = targetPos.y - dollY;
+
+
+// const angle = Math.atan2(deltaY, deltaX) * (180 / Math.PI);
+
+// // ตั้งค่าทิศทางตาม angle ได้เลยเหมือนเดิม 🎉
+
+
+//     if (angle >= -22.5 && angle < 22.5) {
+//       setImgSrc("/images/dollwalk-up-right.gif"); //ขวา
+//     } else if (angle >= 22.5 && angle < 67.5) {
+//       setImgSrc("/images/dollwalk-down.gif"); //ล่างขวา
+//     } else if (angle >= 67.5 && angle < 112.5) {
+//       setImgSrc("/images/dollwalk-down.gif"); //ล่าง
+//     } else if (angle >= 112.5 && angle < 157.5) {
+//       setImgSrc("/images/dollwalk-down.gif"); //ล่างซ้าย
+//     } else if ((angle >= 157.5 && angle <= 180) || (angle >= -180 && angle < -157.5)) {
+//       setImgSrc("/images/dollwalk-down.gif"); //ซ้าย
+//     } else if (angle >= -157.5 && angle < -112.5) {
+//       setImgSrc("/images/dollwalk-up-left.gif"); //บนซ้าย
+//     } else if (angle >= -112.5 && angle < -67.5) {
+//       setImgSrc("/images/dollwalk-up-right.gif"); //บน
+//     } else if (angle >= -67.5 && angle < -22.5) {
+//       setImgSrc("/images/dollwalk-up-right.gif"); //บนขวา
+//     }
+
+//     const handleTransitionEnd = () => {
+//       setImgSrc(animals[targetIndex].resultImg);
+//       setDialogText(animals[targetIndex].dialog);
+//       setStartWalk(false);
+//       setHasReachedAnimal(true);
+//       setTargetIndex(null);
+//       setShowDialog(true);
+//       doll.removeEventListener("transitionend", handleTransitionEnd);
+//     };
+
+//   requestAnimationFrame(() => {
+// setStyle(prev => ({
+//   ...prev,
+//   transform: `translate(${targetPos.x}px, ${targetPos.y}px) scale(0.2)`,
+//   transition: 'transform 4s ease-in-out',
+// }));
+
+
+
+//   doll.addEventListener("transitionend", handleTransitionEnd);
+// });
+
+
+//     return () => {
+//       doll.removeEventListener("transitionend", handleTransitionEnd);
+//     };
+//   }
+// }, [startWalk, hasReachedAnimal, targetIndex, targetPos]);
+
 useEffect(() => {
-if (
-  startWalk &&
-  !hasReachedAnimal &&
-  dollRef.current &&
-  targetIndex !== null &&
-  buttonRefs.current[targetIndex]
-) {
-
-
+  if (
+    startWalk &&
+    !hasReachedAnimal &&
+    dollRef.current &&
+    targetIndex !== null
+  ) {
     const doll = dollRef.current;
+    const container = containerRef.current;
+    const containerRect = container.getBoundingClientRect();
     const dollRect = doll.getBoundingClientRect();
 
-    const deltaX = targetPos.x - dollRect.left;
-    const deltaY = targetPos.y - dollRect.top;
-console.log('dollTop:', dollRect.top);
-console.log('targetY:', targetPos.y);
-console.log('deltaY:', deltaY);
-    // มุมทิศทาง
-    const angle = Math.atan2(deltaY, deltaX) * (180 / Math.PI);
-    if (angle >= -22.5 && angle < 22.5) {
-      setImgSrc("/images/dollwalk-up-right.gif");
-    } else if (angle >= 22.5 && angle < 67.5) {
-      setImgSrc("/images/dollwalk-down.gif");
-    } else if (angle >= 67.5 && angle < 112.5) {
-      setImgSrc("/images/dollwalk-down.gif");
-    } else if (angle >= 112.5 && angle < 157.5) {
-      setImgSrc("/images/dollwalk-down.gif");
-    } else if ((angle >= 157.5 && angle <= 180) || (angle >= -180 && angle < -157.5)) {
-      setImgSrc("/images/dollwalk-down.gif");
-    } else if (angle >= -157.5 && angle < -112.5) {
-      setImgSrc("/images/dollwalk-up-left.gif");
-    } else if (angle >= -112.5 && angle < -67.5) {
-      setImgSrc("/images/dollwalk-up-right.gif");
-    } else if (angle >= -67.5 && angle < -22.5) {
-      setImgSrc("/images/dollwalk-up-right.gif");
-    }
+    // 🧠 ตำแหน่งปัจจุบันของตุ๊กตาใน container
+    const currentX = dollRect.left - containerRect.left;
+    const currentY = dollRect.top - containerRect.top;
 
+    // ✅ delta คือส่วนที่ต้องเปลี่ยนแปลง
+
+const deltaX = targetCenter.x - currentX;
+const deltaY = targetCenter.y - currentY;
+
+
+    // ตั้งทิศทางการเดิน
+    const angle = Math.atan2(deltaY, deltaX) * (180 / Math.PI);
+
+
+    if (angle >= -22.5 && angle < 22.5) {
+      setImgSrc("/images/dollwalk-up-right.gif"); //ขวา
+    } else if (angle >= 22.5 && angle < 67.5) {
+      setImgSrc("/images/dollwalk-down.gif"); //ล่างขวา
+    } else if (angle >= 67.5 && angle < 112.5) {
+      setImgSrc("/images/dollwalk-down.gif"); //ล่าง
+    } else if (angle >= 112.5 && angle < 157.5) {
+      setImgSrc("/images/dollwalk-down.gif"); //ล่างซ้าย
+    } else if ((angle >= 157.5 && angle <= 180) || (angle >= -180 && angle < -157.5)) {
+      setImgSrc("/images/dollwalk-down.gif"); //ซ้าย
+    } else if (angle >= -157.5 && angle < -112.5) {
+      setImgSrc("/images/dollwalk-up-left.gif"); //บนซ้าย
+    } else if (angle >= -112.5 && angle < -67.5) {
+      setImgSrc("/images/dollwalk-up-right.gif"); //บน
+    } else if (angle >= -67.5 && angle < -22.5) {
+      setImgSrc("/images/dollwalk-up-right.gif"); //บนขวา
+    }
     const handleTransitionEnd = () => {
       setImgSrc(animals[targetIndex].resultImg);
       setDialogText(animals[targetIndex].dialog);
@@ -240,7 +345,7 @@ console.log('deltaY:', deltaY);
     requestAnimationFrame(() => {
       setStyle(prev => ({
         ...prev,
-        transform: `translate(${deltaX + getTranslateX(prev.transform)}px, ${deltaY + getTranslateY(prev.transform)}px) scale(0.2)`,
+        transform: `translate(${targetPos.x}px, ${targetPos.y}px) scale(0.2)`,
         transition: 'transform 4s ease-in-out',
       }));
 
@@ -252,7 +357,6 @@ console.log('deltaY:', deltaY);
     };
   }
 }, [startWalk, hasReachedAnimal, targetIndex, targetPos]);
-
 
 // useEffect(() => {
 //   if (startWalk && !hasReachedCow && dollRef.current && buttonRef.current) {
@@ -335,40 +439,41 @@ const getAbsolutePosition = (element) => {
 
 const handleClick = (index) => {
   const animal = animals[index];
+  const container = containerRef.current;
   const doll = dollRef.current;
-  const targetEl = buttonRefs.current[index];
 
-  if (!doll || !targetEl) return;
+  if (!container || !doll) return;
 
-  const dollRect = doll.getBoundingClientRect();
-  const buttonRect = targetEl.getBoundingClientRect();
+  const containerWidth = container.offsetWidth;
+  const containerHeight = container.offsetHeight;
+
+  const dollWidth = doll.offsetWidth;
+  const dollHeight = doll.offsetHeight;
 
   const offsetX = animal.offsetX ?? 0;
   const offsetY = animal.offsetY ?? 0;
 
-  let targetX = 0, targetY = 0;
-
+  const animalX = animal.xPercent * containerWidth;
+  const animalY = animal.yPercent * containerHeight;
+const animalCenterX = animal.xPercent * containerWidth;
+const animalCenterY = animal.yPercent * containerHeight;
+  let targetX;
   if (animal.position === "right") {
-    targetX = buttonRect.right + offsetX;
-    targetY = buttonRect.top + buttonRect.height / 2 - dollRect.height / 2 + offsetY;
+    targetX = animalX + animal.width / 2 + dollWidth / 2 + offsetX;
   } else {
-    targetX = buttonRect.left - dollRect.width + offsetX;
-    targetY = buttonRect.top + buttonRect.height / 2 - dollRect.height / 2 + offsetY;
+    targetX = animalX - animal.width / 2 - dollWidth / 2 + offsetX;
   }
 
-  // 👉 ถ้าเดินถึงแล้ว และกดซ้ำตัวเดิม
-  if (hasReachedAnimal && lastTargetIndex === index) {
-    setShowDialog(true);
-    return;
-  }
+  const targetY = animalY - dollHeight / 2 + offsetY;
 
-  // 👉 ถ้ายังไม่ถึง หรือกดตัวใหม่
   setTargetPos({ x: targetX, y: targetY });
   setTargetIndex(index);
   setLastTargetIndex(index);
   setStartWalk(true);
   setHasReachedAnimal(false);
   setShowDialog(false);
+setTargetCenter({ x: animalCenterX, y: animalCenterY }); // ❗ ใส่เพิ่ม
+
 };
 
 
@@ -682,7 +787,14 @@ setTimeout(() => setBgStep(3), 9000);
 
 
 <div     ref={containerRef} // ✅ เพิ่มตรงน
-         style={{ position: 'relative', width: '100%', height: '100%' }}>
+          style={{
+    position: 'relative', // ✅ สำคัญ!
+    width: '100%',
+    height: '600px',      // ✅ ต้องมีความสูงที่แน่นอน
+    overflow: 'hidden',   // (แนะนำ) กันหลุดขอบ
+
+    
+  }}>
   {animals.map((animal, index) => {
     const left = `${animal.xPercent * 100}%`;
     const bottom = `${animal.yPercent * 100}%`;
@@ -734,8 +846,8 @@ setTimeout(() => setBgStep(3), 9000);
         onClick={() => handleClick(index)}
         style={{
           position: 'absolute',
-          left,
-          bottom,
+          left: `${animal.xPercent * 100}%`,
+          top: `${animal.yPercent * 100}%`, // ✅ ใช้ top
           width: `${animal.width}px`,
           height: `${animal.height}px`,
           zIndex: 9,

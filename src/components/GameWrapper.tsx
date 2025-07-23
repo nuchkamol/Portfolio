@@ -1,3 +1,4 @@
+// GameWrapper.tsx
 import { useEffect, useRef } from 'react';
 
 function GameWrapper({ children }: { children: React.ReactNode }) {
@@ -18,6 +19,9 @@ function GameWrapper({ children }: { children: React.ReactNode }) {
         wrapperRef.current.style.transformOrigin = 'top left';
         wrapperRef.current.style.width = `${baseWidth}px`;
         wrapperRef.current.style.height = `${baseHeight}px`;
+        wrapperRef.current.style.position = 'absolute';
+        wrapperRef.current.style.left = `${(window.innerWidth - baseWidth * scale) / 2}px`;
+        wrapperRef.current.style.top = `${(window.innerHeight - baseHeight * scale) / 2}px`;
       }
     };
 
@@ -28,14 +32,15 @@ function GameWrapper({ children }: { children: React.ReactNode }) {
 
   return (
     <div
-      ref={wrapperRef}
       style={{
-        position: 'relative',
+        width: '100vw',
+        height: '100vh',
         overflow: 'hidden',
+        position: 'relative',
         background: '#bfefff',
       }}
     >
-      {children}
+      <div ref={wrapperRef}>{children}</div>
     </div>
   );
 }

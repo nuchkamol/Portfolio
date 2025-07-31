@@ -63,7 +63,7 @@ const [targetCenter, setTargetCenter] = useState({ x: 0, y: 0 });
     dialog: "กระต่ายน้อยยย~ ฉันเคยเลี้ยงกระต่าย กระต่ายเจ้าขี้เป็นเม็ดๆ และยังมีลูกเก่งอีกด้วย ^^",
     position: "left", 
     xPercent: 0.3,  // 20% ของความกว้าง container
-    yPercent: 0.8,  // 50% ของความสูง container (จากล่างขึ้นบน)
+    yPercent: 0.6,  // 50% ของความสูง container (จากล่างขึ้นบน)
     offsetX: 0,
     offsetY: -160,
     width:60,
@@ -78,17 +78,52 @@ const [targetCenter, setTargetCenter] = useState({ x: 0, y: 0 });
     dialog: "ลูบแมวแล้ว~ 🐱",
     position: "left", 
     xPercent: 0.4,  
-    yPercent: 0.7,  
+    yPercent: 0.5,  
     offsetX: 200,
     offsetY: -100,
     width:300,
     height:200
   },{
     name: "swing",
-    xPercent: 0.6,
+    xPercent: 0.06,
     yPercent: 0.4,
     type: "swing",
+    resultImg: "/images/doll-sleep.png",
+    offsetX: -300,
+    offsetY: -70,
+    dialog: "นอนดีกว่า~ 🐱",
+    width:30,
+    height:20,
+    position: "right", 
   },
+  {
+    name: "carrot",
+    normalSrc:"/images/carot-baby.png",
+    hoverSrc:"/images/carot.png",
+    resultImg: "/images/doll-sit.png",
+    dialog: "ฉันปลูกแครอทด้วยนะ",
+    position: "left", 
+    xPercent: 0.6,  
+    yPercent: 0.6,  
+    offsetX: 200,
+    offsetY: -100,
+    width:300,
+    height:200
+  },
+  { 
+    name: "resume",
+    normalSrc:"/images/resume.png",
+    hoverSrc:"/images/resume.png",
+    resultImg: "/images/doll-walk3.png",
+    dialog: "resume ของฉัน",
+    position: "left", 
+    xPercent: 0.9,  
+    yPercent: 0.55,  
+    offsetX: 20,
+    offsetY: -120,
+    width:100,
+    height:100
+  }
 ];
 
 
@@ -790,50 +825,61 @@ setTimeout(() => setBgStep(3), 9000);
           style={{
     position: 'relative', // ✅ สำคัญ!
     width: '100%',
-    height: '600px',      // ✅ ต้องมีความสูงที่แน่นอน
+    height: '800px',      // ✅ ต้องมีความสูงที่แน่นอน
     overflow: 'hidden',   // (แนะนำ) กันหลุดขอบ
 
     
   }}>
   {animals.map((animal, index) => {
-    const left = `${animal.xPercent * 100}%`;
-    const bottom = `${animal.yPercent * 100}%`;
 
-    // if (animal.type === "swing") {
-    //   return (
-    //     <div
-    //       key={index}
-    //       className="swing-wrapper"
-    //       style={{
-    //         position: 'absolute',
-    //         left,
-    //         bottom,
-    //         width: '300px',
-    //         height: '300px',
-    //         zIndex: 8,
-    //         cursor: showBalloon ? 'default' : 'pointer',
-    //         visibility: showBalloon ? 'hidden' : 'visible',
-    //         pointerEvents: showBalloon ? 'none' : 'auto',
-    //       }}
-    //     >
-    //       <img
-    //         src="/images/swing-nochair.png"
-    //         className="swing-frame"
-    //         style={{ width: '100%', height: '100%', position: 'absolute' }}
-    //       />
-    //       <div
-    //         className="seat-wrapper"
-    //         style={{ position: 'absolute', width: '100%', height: '100%' }}
-    //       >
-    //         <img
-    //           src="/images/swingchair.png"
-    //           className="swing-seat"
-    //           style={{ width: '100%', height: '100%' }}
-    //         />
-    //       </div>
-    //     </div>
-    //   );
-    // }
+
+    if (animal.type === "swing") {
+      return (
+        <div
+          key={index}
+          ref={el => buttonRefs.current[index] = el}
+          normalSrc={animal.normalSrc}
+          hoverSrc={animal.hoverSrc}
+          alt={animal.name}
+          onClick={() => handleClick(index)}
+          className="swing-wrapper"
+          style={{
+    
+            position: 'absolute',
+            left: `${animal.xPercent * 100}%`,
+            top: `${animal.yPercent * 100}%`, // ✅ ใช้ top
+            width: `${animal.width}px`,
+            height: `${animal.height}px`,
+            zIndex: 8,
+            cursor: showBalloon ? 'default' : 'pointer',
+            visibility: showBalloon ? 'hidden' : 'visible',
+            pointerEvents: showBalloon ? 'none' : 'auto',
+          }}
+        >
+          <img
+            src="/images/swing-nochair.png"
+            className="swing-frame"
+            style={{ width: '200px', height: '200px', position: 'absolute' }}
+          />
+          <div
+            className="seat-wrapper"
+            style={{ position: 'absolute', width: '100px', height: '100px' }}
+          >
+          <img
+            src="/images/swingchair.png"
+            className="swing-seat"
+            style={{
+              width: '100px',
+              height: '70px',
+              position: 'absolute',
+              top: '100px',
+              left: '115px',
+            }}
+          />
+          </div>
+        </div>
+      );
+    }else{
 
     // กรณีเป็นสัตว์ทั่วไป
     return (
@@ -856,7 +902,10 @@ setTimeout(() => setBgStep(3), 9000);
           pointerEvents: showBalloon ? 'none' : 'auto',
         }}
       />
+
+
     );
+  }
   })}
 </div>
 
@@ -935,7 +984,7 @@ bottom: '30%',
   />
 </div>
 
-     <img
+     {/* <img
       src="/images/resume.png"
       alt="resume"
       className="resume"
@@ -947,7 +996,7 @@ bottom: '30%',
          zIndex:'9',
         cursor:'pointer'
       }}
-    />
+    /> */}
 
        {/* <HoverImage
   normalSrc="/images/vegetable.png"
@@ -967,7 +1016,7 @@ bottom: '30%',
 
 
 
-       <HoverImage
+       {/* <HoverImage
   normalSrc="/images/carot-baby.png"
   hoverSrc="/images/carot.png"
   alt="carot"
@@ -980,8 +1029,8 @@ bottom: '30%',
     transform: 'scale(0.4)',
     zIndex: 9,
     cursor: 'pointer',
-  }}
-/>
+  }
+/>*/}
 
 
 

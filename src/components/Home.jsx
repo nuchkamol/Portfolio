@@ -46,7 +46,7 @@ const [targetCenter, setTargetCenter] = useState({ x: 0, y: 0 });
     normalSrc: "/images/cow.png",
     hoverSrc: "/images/cow-face.png",
     resultImg: "/images/doll-cow.png",
-    dialog: "ลูบวัวแล้ว~ 🐄",
+    dialog: "I hold a master's in MIS and a bachelor's in CS. I enjoy building apps and solving tricky problems. C#.NET is my main skill, but I also work with React, Node.js, and PHP. I love learning new tech, and I’m happy to see my work come to life. 🐄",
     position: "right",
     xPercent: 0.2,  // 20% ของความกว้าง container
     yPercent: 0.2,  // 50% ของความสูง container (จากล่างขึ้นบน)
@@ -60,7 +60,7 @@ const [targetCenter, setTargetCenter] = useState({ x: 0, y: 0 });
     normalSrc: "/images/rabbit.png",
     hoverSrc: "/images/rabbit-face.png",
     resultImg: "/images/doll-sit.png",
-    dialog: "กระต่ายน้อยยย~ ฉันเคยเลี้ยงกระต่าย กระต่ายเจ้าขี้เป็นเม็ดๆ และยังมีลูกเก่งอีกด้วย ^^",
+    dialog: "I love various types of animals, such as rabbits, mice, dogs, cats, cows, and many others. My hobbies are singing, watching news about aliens and technology, and sometimes I also like to learn about astrology.",
     position: "left", 
     xPercent: 0.3,  // 20% ของความกว้าง container
     yPercent: 0.6,  // 50% ของความสูง container (จากล่างขึ้นบน)
@@ -75,7 +75,7 @@ const [targetCenter, setTargetCenter] = useState({ x: 0, y: 0 });
     normalSrc: "/images/vegetable.png",
     hoverSrc: "/images/vegetable-grow.png",
     resultImg: "/images/doll-sit.png",
-    dialog: "ลูบแมวแล้ว~ 🐱",
+    dialog: "I have over 10 years of experience in web application development. If you want to see what I’ve been working on, feel free to check out my portfolio at my home—just click on the house. Welcome!🐱",
     position: "left", 
     xPercent: 0.4,  
     yPercent: 0.5,  
@@ -91,7 +91,7 @@ const [targetCenter, setTargetCenter] = useState({ x: 0, y: 0 });
     resultImg: "/images/doll-sleep.png",
     offsetX: -300,
     offsetY: -70,
-    dialog: "นอนดีกว่า~ 🐱",
+    dialog: "I'm chasing my dream of working remotely for an international company and being with the one I love 🐱",
     width:30,
     height:20,
     position: "right", 
@@ -101,7 +101,7 @@ const [targetCenter, setTargetCenter] = useState({ x: 0, y: 0 });
     normalSrc:"/images/carot-baby.png",
     hoverSrc:"/images/carot.png",
     resultImg: "/images/doll-sit.png",
-    dialog: "ฉันปลูกแครอทด้วยนะ",
+    dialog: "Contact me : Nuchkmun@hotmail.com , LineID : nnkam , Tel : +66979896641",
     position: "left", 
     xPercent: 0.6,  
     yPercent: 0.6,  
@@ -115,7 +115,7 @@ const [targetCenter, setTargetCenter] = useState({ x: 0, y: 0 });
     normalSrc:"/images/resume.png",
     hoverSrc:"/images/resume.png",
     resultImg: "/images/doll-walk3.png",
-    dialog: "resume ของฉัน",
+    dialog: "My resume",
     position: "left", 
     xPercent: 0.9,  
     yPercent: 0.55,  
@@ -123,7 +123,23 @@ const [targetCenter, setTargetCenter] = useState({ x: 0, y: 0 });
     offsetY: -120,
     width:100,
     height:100
-  }
+  },
+   {
+    name: "door",
+    type: "door",
+    normalSrc: "/images/home.png",
+    resultImg: "/images/doll-walk3.png",
+    dialog: "Welcome to my house",
+    position: "left",
+    xPercent: 0.4,  
+    yPercent: -0.1,  
+    offsetX: 900,
+    offsetY: 280,
+    width:800,
+    height:800
+  },
+
+
 ];
 
 
@@ -146,9 +162,9 @@ const [hovered, setHovered] = useState(false);
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
-const bg1 = isMobile ? '/images/sky-back-new-1-vertical.png' : '/images/sky-back-new-1.png';
-const bg2 = isMobile ? '/images/sky-back-new-2-vertical.png' : '/images/sky-back-new-2.png';
-const bg3 = isMobile ? '/images/sky-back-new-3-vertical.png' : '/images/sky-back-new-3.png';
+const bg1 = '/images/sky-back-new-1.png';
+const bg2 =  '/images/sky-back-new-2.png';
+const bg3 = '/images/sky-back-new-3.png';
 
 
   useEffect(() => {
@@ -189,11 +205,7 @@ const bg3 = isMobile ? '/images/sky-back-new-3-vertical.png' : '/images/sky-back
 
     move();
 
-    // const timer = setTimeout(() => {
-    //   navigate('/profile');
-    // }, 12000);
 
-    // return () => clearTimeout(timer);
   }, []);
 
 // const [styledoll, setStyle] = useState({
@@ -243,7 +255,6 @@ function getTranslateY(transform) {
   const match = /translate\([^,]+,\s*(-?\d+(?:\.\d+)?)/.exec(transform);
   return match ? parseFloat(match[1]) : 0;
 }
-
 
 
 
@@ -499,6 +510,7 @@ const animalCenterY = animal.yPercent * containerHeight;
     targetX = animalX - animal.width / 2 - dollWidth / 2 + offsetX;
   }
 
+
   const targetY = animalY - dollHeight / 2 + offsetY;
 
   setTargetPos({ x: targetX, y: targetY });
@@ -508,7 +520,16 @@ const animalCenterY = animal.yPercent * containerHeight;
   setHasReachedAnimal(false);
   setShowDialog(false);
 setTargetCenter({ x: animalCenterX, y: animalCenterY }); // ❗ ใส่เพิ่ม
-
+  if(animal.name == "resume"){
+    const link = document.createElement("a");
+    link.href = "/Doc/Nuchkamol Nutaman CV.pdf"; // ใส่ URL ของไฟล์
+    link.download = "NuchkamolNutaman.pdf";    // ชื่อไฟล์ที่ดาวน์โหลด
+    link.click();
+  }else if(animal.name == "door"){
+       const timer = setTimeout(() => {
+      navigate('/home');
+    }, 3000); // 3000 ms = 3 วินาที
+  }
 };
 
 
@@ -607,15 +628,17 @@ const moveBalloonToCenter = () => {
   const targetScale = 0.6;
 
   // ✅ STEP 2: ล็อกตำแหน่งปัจจุบันไว้ด้วย fixed และ left/top จริง
-  balloon.style.position = "fixed";
-  balloon.style.left = `${rect.left}px`;
-  balloon.style.top = `${rect.top}px`;
-  balloon.style.bottom = "auto";
-  balloon.style.right = "auto";
+// ล็อกตำแหน่งก่อน animation
 
-  // ✅ STEP 3: ใส่ transform เริ่มต้น
-  balloon.style.transform = `translate(0px, 0px) scale(${startScale})`;
-  balloon.style.transition = "none";
+balloon.style.position = "fixed";
+balloon.style.left = `${rect.left}px`;
+balloon.style.top = `${rect.top}px`;
+balloon.style.bottom = "auto";
+balloon.style.right = "auto";
+balloon.style.transform = `translate(0px, 0px) scale(${startScale})`;
+balloon.style.transition = "none";
+
+
 
        // 🔊 เสียงประกอบ
   const sound = new Audio("/sounds/air-woosh.wav");
@@ -672,6 +695,11 @@ setTimeout(() => setBgStep(3), 9000);
 };
 
 
+
+  const handleDialogMySelf = () => {
+    setDialogText("Hello! My name is Nuchkamol Nutaman, but you can call me Gam. I'm from Thailand. Nice to meet you!");
+    setShowDialog(true); // เปิด dialog
+  };
 
 
   const handleCloudClick = (idx) => {
@@ -879,7 +907,63 @@ setTimeout(() => setBgStep(3), 9000);
           </div>
         </div>
       );
-    }else{
+    }else if(animal.type === "door"){
+   return (
+
+          <div
+          key={index}
+          ref={el => buttonRefs.current[index] = el}
+          normalSrc={animal.normalSrc}
+          hoverSrc={animal.hoverSrc}
+          alt={animal.name}
+          onClick={() => handleClick(index)}
+          onMouseEnter={() => setIsOpen(true)}
+          onMouseLeave={() => setIsOpen(false)}
+          className="house"
+          style={{
+    
+            position: 'absolute',
+            left: `${animal.xPercent * 100}%`,
+            top: `${animal.yPercent * 100}%`, // ✅ ใช้ top
+            width: `${animal.width}px`,
+            height: `${animal.height}px`,
+            zIndex: 9,
+            cursor: showBalloon ? 'default' : 'pointer',
+            visibility: showBalloon ? 'hidden' : 'visible',
+            pointerEvents: showBalloon ? 'none' : 'auto',
+          }}
+        >
+ 
+          <img
+            src="/images/home.png"
+            alt="home"
+            className="house-body"
+            style={{
+              display: 'block',
+            }}
+          />
+
+          <img
+            src="/images/door.png"
+            alt="door"
+            className="house-door"
+            style={{
+              position: 'absolute',
+              bottom: '140px',
+              left: '210px',
+              width: '140px',
+              transformOrigin: 'left center',
+              transform: isOpen ? 'rotateY(-110deg)' : 'rotateY(20deg)',
+              transition: 'transform 0.5s ease',
+              height:'250px'
+            }}
+          />
+        </div>
+
+     );
+
+    }
+    else{
 
     // กรณีเป็นสัตว์ทั่วไป
     return (
@@ -923,6 +1007,7 @@ setTimeout(() => setBgStep(3), 9000);
   }}
     ref={dollImageRef}        // 👉 เฉพาะ img
   outerRef={dollRef}        // 👉 ใช้ transition ที่ div
+    onClick={handleDialogMySelf}  // ✅ ใส่ตรงนี้ได้เลย
 />
 {!showBalloon && (
   <>
@@ -945,14 +1030,18 @@ setTimeout(() => setBgStep(3), 9000);
 
 
 
-<div
+{/* <div
   className="house"
   onMouseEnter={() => setIsOpen(true)}
   onMouseLeave={() => setIsOpen(false)}
+  key={index}
+  ref={el => buttonRefs.current[index] = el}
   style={{
-    position: 'fixed',
- left: '50%',
-bottom: '30%',
+  position: 'absolute',
+  left: `${animal.xPercent * 100}%`,
+  top: `${animal.yPercent * 100}%`, // ✅ ใช้ top
+  width: `${animal.width}px`,
+  height: `${animal.height}px`,
     transform: 'scale(1)',
     zIndex: 9,
     cursor: 'pointer',
@@ -982,7 +1071,7 @@ bottom: '30%',
       height:'120px'
     }}
   />
-</div>
+</div> */}
 
      {/* <img
       src="/images/resume.png"

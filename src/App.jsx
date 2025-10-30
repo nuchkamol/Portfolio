@@ -22,13 +22,15 @@ function App() {
 
       <Routes>
         {/* Route สำหรับหน้าหลัก - นี่คือส่วนที่กำหนดให้ Home.js เป็น default page */}
-        <Route path="/" element={<Profile />} />
+        <Route path="/home" element={<Profile />} />
         {/* Route สำหรับหน้าเกี่ยวกับเรา */}
-       <Route path="/home" element={
+       <Route path="/" element={
           <GameWrapper>
             <Home />
           </GameWrapper>
         } />
+
+        
         {/* Route สำหรับหน้าไม่พบ (ต้องอยู่ล่างสุด) */}
         <Route path="*" element={<NotFound />} />
    

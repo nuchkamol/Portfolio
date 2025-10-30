@@ -1,27 +1,32 @@
-// GameWrapper.tsx
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import '../css/GameWrapper.css'; // ✅ นำเข้า CSS เฉพาะ component นี้
 
 function GameWrapper({ children }: { children: React.ReactNode }) {
   const wrapperRef = useRef<HTMLDivElement>(null);
+  const [isPortrait, setIsPortrait] = useState(window.innerHeight > window.innerWidth);
 
   useEffect(() => {
     const baseWidth = 1280;
     const baseHeight = 720;
 
     const resize = () => {
+      // ตรวจแนวหน้าจอ
+      setIsPortrait(window.innerHeight > window.innerWidth);
+
       const scale = Math.min(
         window.innerWidth / baseWidth,
         window.innerHeight / baseHeight
       );
 
       if (wrapperRef.current) {
-        wrapperRef.current.style.transform = `scale(${scale})`;
-        wrapperRef.current.style.transformOrigin = 'top left';
+        wrapperRef.current.style.zoom = `${scale}`;
         wrapperRef.current.style.width = `${baseWidth}px`;
         wrapperRef.current.style.height = `${baseHeight}px`;
         wrapperRef.current.style.position = 'absolute';
-        wrapperRef.current.style.left = `${(window.innerWidth - baseWidth * scale) / 2}px`;
-        wrapperRef.current.style.top = `${(window.innerHeight - baseHeight * scale) / 2}px`;
+        wrapperRef.current.style.left = '50%';
+        wrapperRef.current.style.top = '50%';
+        wrapperRef.current.style.transform = 'translate(-50%, -50%)';
+        wrapperRef.current.style.transformOrigin = 'center center';
       }
     };
 
@@ -31,16 +36,16 @@ function GameWrapper({ children }: { children: React.ReactNode }) {
   }, []);
 
   return (
-    <div
-      style={{
-        width: '100vw',
-        height: '100vh',
-        overflow: 'hidden',
-        position: 'relative',
-        background: '#bfefff',
-      }}
-    >
-      <div ref={wrapperRef}>{children}</div>
+    <div className="game-container">
+      {isPortrait && (
+        <div className="rotate-overlay">
+          กรุณาหมุนจอเป็นแนวนอนเพื่อใช้งาน 😊
+        </div>
+      )}
+
+      <div className="game-wrapper" ref={wrapperRef}>
+        {children}
+      </div>
     </div>
   );
 }

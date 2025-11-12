@@ -40,6 +40,7 @@ function GameWrapper({ children }: { children: React.ReactNode }) {
       {isPortrait && (
         <div className="rotate-overlay">
           กรุณาหมุนจอเป็นแนวนอนเพื่อใช้งาน 😊
+          Please rotate your device to landscape mode.😊
         </div>
       )}
 

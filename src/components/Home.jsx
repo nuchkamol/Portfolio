@@ -46,7 +46,7 @@ const [targetCenter, setTargetCenter] = useState({ x: 0, y: 0 });
     normalSrc: "/images/cow.png",
     hoverSrc: "/images/cow-face.png",
     resultImg: "/images/doll-cow.png",
-    dialog: "I hold a master's in MIS and a bachelor's in CS. I enjoy building apps and solving tricky problems. C#.NET is my main skill, but I also work with React, Node.js, and PHP. I love learning new tech, and I’m happy to see my work come to life. 🐄",
+    dialog: "I hold a master's in MIS(Management Information System) and a bachelor's in CS(Com Sci). C#.NET is my main skill, but I also work with React, Node.js, and PHP. I love learning new tech, and I’m happy to see my work come to life. 🐄",
     position: "right",
     xPercent: 0.2,  // 20% ของความกว้าง container
     yPercent: 0.2,  // 50% ของความสูง container (จากล่างขึ้นบน)
@@ -60,7 +60,7 @@ const [targetCenter, setTargetCenter] = useState({ x: 0, y: 0 });
     normalSrc: "/images/rabbit.png",
     hoverSrc: "/images/rabbit-face.png",
     resultImg: "/images/doll-sit.png",
-    dialog: "I love various types of animals, such as rabbits, mice, dogs, cats, cows, and many others. My hobbies are singing, watching news about aliens and technology, and sometimes I also like to learn about astrology.",
+    dialog: "I love various types of animals, My hobbies are singing, watching news about technology , philosophy and sometimes I also like to learn about astrology.",
     position: "left", 
     xPercent: 0.3,  // 20% ของความกว้าง container
     yPercent: 0.6,  // 50% ของความสูง container (จากล่างขึ้นบน)

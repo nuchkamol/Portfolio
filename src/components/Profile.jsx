@@ -1,10 +1,9 @@
 // React version of the portfolio template with smooth scroll + fade-in effect + profile image
 import React, { useEffect, useRef, useState } from "react";
 import "../css/Profile.css";
-
 import cv from "../docs/CV 2025.pdf";
 import profileImage from "../images/profile.jpg"; // 👈 add your image to src folder and name it profile.jpg
-
+import { useLocation , Link } from "react-router-dom";
 
 const skills = [
   ".NET Core",
@@ -77,13 +76,7 @@ const projects = [
 
 ];
 
-function scrollToSection(e, id) {
-  e.preventDefault();
-  const el = document.getElementById(id);
-  if (el) {
-    el.scrollIntoView({ behavior: "smooth" });
-  }
-}
+
 
 function Profile() {
        const iframeRef = useRef();
@@ -165,6 +158,34 @@ const startDrag = (e) => {
 };
 
 
+  const location = useLocation();
+
+  // 🪄 ① ฟังก์ชัน scrollToSection เวลาอยู่ในหน้า Home แล้วกดเมนู
+  const scrollToSection = (e, id) => {
+    e?.preventDefault();
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
+
+
+  // 🪄 ② useEffect สำหรับ scroll เมื่อมาจากหน้าอื่น (มี ?scrollTo=)
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const section = params.get("scrollTo");
+    if (section) {
+      const el = document.getElementById(section);
+      if (el) {
+        setTimeout(() => {
+          el.scrollIntoView({ behavior: "smooth" });
+        }, 300);
+      }
+    }
+  }, [location]);
+
+  // 🪄 ③ useEffect สำหรับ fade-in animation (อันที่แก้มมีอยู่)
   useEffect(() => {
     const observer = new IntersectionObserver(
       entries => {
@@ -188,9 +209,12 @@ const startDrag = (e) => {
     return () => observer.disconnect();
   }, []);
 
+
+  
+
   return (
     <div className="blur-in">
-      <nav className="navbar">
+      {/* <nav className="navbar">
         <ul>
           <li><a href="#about" onClick={(e) => scrollToSection(e, "about")}>About</a></li>
           <li><a href="#skills" onClick={(e) => scrollToSection(e, "skills")}>Skills</a></li>
@@ -198,12 +222,13 @@ const startDrag = (e) => {
           <li><a href="#resume" onClick={(e) => scrollToSection(e, "resume")}>Resume</a></li>
           <li><a href="#game" onClick={(e) => scrollToSection(e, "game")}>myGame</a></li>
           <li><a href="#creator" onClick={(e) => scrollToSection(e, "creator")}>myCreator</a></li>
-          <li><a href="#video" onClick={(e) => scrollToSection(e, "video")}>Portfolio TV</a></li>
+           <li><Link to="/work">Portfolio TV</Link></li>
 
         </ul>
-      </nav>
+      </nav> */}
 
       <header className="header">
+        <p style={{height:"80px"}}></p>
         <img src={profileImage} alt="Profile" className="profile-pic" />
         <h1>Nuchkamol Nutaman</h1>
         <p>Senior Full-Stack Developer | .NET | PHP | API Integration</p>
@@ -245,10 +270,11 @@ const startDrag = (e) => {
           <p>
             LinkedIn: <a href="https://www.linkedin.com/in/nuchkamol-nutaman-930b332b5" target="_blank" rel="noreferrer">linkedin.com/in/nuchkamol-nutaman</a>
           </p>
-          
+     
+          <li><Link to="/cv">Resume Click here </Link></li>
         </section>
 
-         <section className ="resume-section" id="resume">
+         {/* <section className ="resume-section" id="resume">
                 <div className ="resume-section-content">
                     <h2 className ="mb-5">resume</h2>
                   
@@ -266,8 +292,8 @@ const startDrag = (e) => {
                       
                   
                
-            </section>
-        <section className ="game-section" id="game">
+            </section> */}
+        {/* <section className ="game-section" id="game">
 
                                 <h2 class="mb-5">My Game</h2>
       <div id="game">
@@ -287,7 +313,7 @@ const startDrag = (e) => {
         </div>
       </div>
     </div> 
-        </section>
+        </section> */}
 
     <section className="creator-section" id="creator">
           <div className="resume-section-content">
@@ -332,7 +358,7 @@ const startDrag = (e) => {
           </div>
         </section>
 
-
+{/* 
 
  <section id="video" className="video-section">
           <h2>Portfolio TV</h2>
@@ -387,7 +413,7 @@ const startDrag = (e) => {
               <button onClick={() => setVideoId("0weByj4Z2e8")}>WiFi Portal</button>
             </div>
           </div>
-        </section>
+        </section> */}
 
 
       </div>

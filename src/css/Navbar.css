@@ -1,0 +1,90 @@
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 25px;
+  background-color: #222;
+  color: white;
+  z-index: 1000;
+}
+
+/* โลโก้ */
+.navbar-logo {
+  font-weight: bold;
+  font-size: 20px;
+  color: white;
+}
+
+/* เมนูหลัก */
+.menu {
+  display: flex;
+  gap: 20px;
+  list-style: none;
+}
+
+.menu li a,
+.menu li a:visited,
+.menu li a:active {
+  color: white;
+  text-decoration: none;
+  font-size: 16px;
+  transition: color 0.3s ease;
+}
+
+/* สีตอน hover */
+.menu li a:hover {
+  color: #00bcd4; /* ฟ้าอมเขียวแบบพอร์ตโปรไฟล์ดูสดใส */
+}
+
+/* ปุ่ม hamburger */
+.menu-toggle {
+  display: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: white;
+}
+
+/* Responsive สำหรับมือถือ */
+@media (max-width: 768px) {
+  .menu-toggle {
+    display: block;
+  }
+
+  .menu {
+    position: absolute;
+    top: 60px;
+    right: 0;
+    background-color: #222;
+    width: 200px;
+    flex-direction: column;
+    transform: translateX(100%);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease-in-out;
+    border-radius: 8px 0 0 8px;
+    padding: 10px 0;
+  }
+
+  .menu.open {
+    transform: translateX(0);
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .menu li {
+    text-align: right;
+    margin: 10px 20px;
+  }
+
+  .menu a {
+    color: white;
+  }
+
+  .menu a:hover {
+    color: #00bcd4;
+  }
+}

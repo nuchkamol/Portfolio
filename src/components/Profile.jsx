@@ -19,13 +19,18 @@ const skills = [
   "Unity",
   "React",
   "Node.js",
-  "Database Oracle/MSSQL/mySQL",
+  "Express.js",
+  "PM2",
+  "Database Oracle/MSSQL/mySQL/MongoDB",
   "Captive Portal",
   "Responsive",
   "HTML5",
   "CSS",
   "JS",
-  "TypeScript"
+  "TypeScript",
+  "JQuery",
+  "Bootstrap"
+
 
 
   
@@ -40,7 +45,7 @@ const projects = [
 } ,
   {
     title: "PRCMS for BEC World",
-    tech: ".NET Core, Angular, SQL Server",
+    tech: ".NET Core , SQL Server",
     desc: "Content management system for press releases. Built API-driven backend with role-based access, public/private sharing, and integrated photo galleries."
   },
   {
@@ -54,7 +59,7 @@ const projects = [
   desc: "Developed the U.S. Election 2024 API by integrating data from AP News, delivering real-time results to a custom Graphic Viz Engine."
 },{
   title: "Free SIM Online Registration",
-  tech: "C# MVC, Co-operated with Rabbit LINE Pay (LINE Company)",
+  tech: "C# .net Framework MVC, Co-operated with Rabbit LINE Pay (LINE Company)",
   desc: "Developed an online survey and free SIM registration system using C# MVC, in collaboration with the Rabbit LINE Pay team."
 },{
   title: "E-Exam System for Chulalongkorn University",
@@ -317,7 +322,7 @@ const startDrag = (e) => {
 
     <section className="creator-section" id="creator">
           <div className="resume-section-content">
-            <h2 className="mb-5">3D creator by me</h2>
+            <h2 className="mb-5">3D created by me</h2>
             <div className="creators-embed-wrapper">
               <iframe
                 allow="camera"

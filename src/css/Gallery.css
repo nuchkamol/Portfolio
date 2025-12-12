@@ -1,0 +1,66 @@
+/* การจัดรูปแบบพื้นฐานสำหรับ body */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f5f5f5;
+}
+
+/* Container หลักของ Gallery */
+.gallery-container {
+  display: grid; /* ใช้ CSS Grid ในการจัดเรียง */
+  /* สร้างคอลัมน์อัตโนมัติ: อย่างน้อย 200px และขยายเต็มพื้นที่ว่าง (1fr) */
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+  gap: 15px; /* ระยะห่างระหว่างรูปภาพ */
+  padding: 20px;
+  max-width: 1200px; /* จำกัดความกว้างสูงสุดของแกลเลอรี */
+  margin: 0 auto; /* จัดให้อยู่ตรงกลางหน้าจอ */
+}
+
+/* แต่ละไอเท็มในแกลเลอรี (กรอบรูป) */
+.gallery-item {
+  overflow: hidden; /* ซ่อนส่วนที่เกินขอบ */
+  border-radius: 10px; /* ขอบโค้งมน */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* เพิ่มเงาเล็กน้อย */
+  transition: transform 0.3s ease-in-out; /* เพิ่ม Transition เมื่อ hover */
+  cursor: pointer; /* เปลี่ยน cursor เป็นรูปมือ */
+}
+
+/* รูปภาพภายในไอเท็ม */
+.gallery-item img {
+  width: 100%; /* ทำให้รูปภาพกว้างเต็ม container */
+  height: 200px; /* กำหนดความสูงคงที่ */
+  display: block;
+  /* ทำให้รูปภาพครอบคลุมพื้นที่โดยไม่บิดเบี้ยว (ตัดขอบส่วนเกินออก) */
+  object-fit: cover; 
+  transition: transform 0.3s ease-in-out; /* เพิ่ม Transition เมื่อ hover */
+}
+
+/* Hover Effect: เมื่อนำเมาส์ไปชี้ที่กรอบรูป */
+.gallery-item:hover {
+  transform: scale(1.03); /* ขยายใหญ่ขึ้นเล็กน้อย */
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2); /* ทำให้เงาชัดขึ้น */
+}
+
+/* Hover Effect: เมื่อนำเมาส์ไปชี้ที่รูปภาพภายในกรอบรูป */
+.gallery-item:hover img {
+    transform: scale(1.1); /* ซูมรูปภาพเข้าไปเล็กน้อย */
+}
+
+/* ส่วนหัวของหน้า */
+.gallery-header {
+  text-align: center;
+  padding: 40px 20px 20px;
+  color: #333;
+}
+
+/* Responsive: ปรับจำนวนคอลัมน์เมื่อหน้าจอเล็กกว่า 600px */
+@media (max-width: 600px) {
+  .gallery-container {
+    /* เหลือแค่ 2 คอลัมน์ บนมือถือ */
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); 
+  }
+  .gallery-item img {
+      height: 150px; /* ลดความสูงของรูปภาพบนมือถือ */
+  }
+}

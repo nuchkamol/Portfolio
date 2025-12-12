@@ -1,0 +1,132 @@
+
+/* Desktop menu normal display */
+@media (min-width: 769px) {
+  .menu {
+    opacity: 1 !important;
+    transform: none !important;
+    position: static !important;
+    height: auto !important;
+    width: auto !important;
+    flex-direction: row !important;
+    visibility: visible !important;
+    overflow: visible !important;
+  }
+
+  .menu-toggle {
+    display: none;
+  }
+}
+
+
+/* ---- Animation for ALL devices ---- */
+.menu {
+  opacity: 0;
+  transform: translateX(100%);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.menu.open {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.menu.closing {
+  opacity: 0;
+  transform: translateX(100%);
+}
+
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 25px;
+  background-color: #222;
+  color: white;
+  z-index: 1000;
+}
+
+/* โลโก้ */
+.navbar-logo {
+  font-weight: bold;
+  font-size: 20px;
+  color: white;
+}
+
+/* เมนูหลัก */
+.menu {
+  display: flex;
+  gap: 20px;
+  list-style: none;
+}
+
+.menu li a,
+.menu li a:visited,
+.menu li a:active {
+  color: white;
+  text-decoration: none;
+  font-size: 16px;
+  transition: color 0.3s ease;
+}
+
+/* สีตอน hover */
+.menu li a:hover {
+  color: #00bcd4; /* ฟ้าอมเขียวแบบพอร์ตโปรไฟล์ดูสดใส */
+}
+
+/* ปุ่ม hamburger */
+.menu-toggle {
+  display: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: white;
+}
+
+/* Responsive สำหรับมือถือ */
+@media (max-width: 768px) {
+  .menu-toggle {
+    display: block;
+  }
+
+  .menu {
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 100vh;
+    width: 220px;
+    flex-direction: column;
+    background-color: #222;
+    padding-top: 80px;
+    padding-bottom: 20px;
+    overflow-y: auto;
+    z-index: 2000;
+  }
+
+
+  .menu.open {
+    transform: translateX(0);
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .menu li {
+    text-align: right;
+    margin: 15px 20px;
+  }
+
+  .menu a {
+    color: white;
+  }
+
+  .menu a:hover {
+    color: #00bcd4;
+  }
+
+}
+
+
+  
+

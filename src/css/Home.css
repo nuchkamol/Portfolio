@@ -1,0 +1,264 @@
+
+
+
+.parallax-container {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
+
+.parallax-layer {
+  position: absolute;
+  width: 100%;
+  height: 200%;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.floating-cloud {
+  position: absolute;
+  opacity: 0.9;
+
+  transition: transform 0.1s linear;
+  cursor: pointer;
+}
+
+.balloon-fixed {
+  position: fixed; /* เปลี่ยนจาก absolute เป็น fixed */
+  bottom: 10px;
+  right: 10px;
+  width: 450px;
+
+  z-index: 10;
+  cursor: pointer;
+    /* เพิ่ม transition ให้กับตำแหน่งและ transform */
+ transition:
+    top 4s ease-in-out,
+    left 4s ease-in-out,
+    transform 5s ease-in-out;
+}
+/* เมื่อ hover ค่อยเริ่ม animation */
+.balloon-fixed:hover {
+  animation: floatUpDown 1.5s ease-in-out infinite;
+}
+@media (max-width: 768px) {
+.balloon-fixed{
+    width: 50%; /* จอเล็ก ให้เล็กลงครึ่งนึง */
+  }
+}
+@keyframes floatUpDown {
+  0%   { transform: translateY(0); }
+  50%  { transform: translateY(-15px); }
+  100% { transform: translateY(0); }
+}
+
+@keyframes sway {
+  0%   { transform: rotate(0deg); }
+  25%  { transform: rotate(5deg); }
+  50%  { transform: rotate(0deg); }
+  75%  { transform: rotate(-5deg); }
+  100% { transform: rotate(0deg); }
+}
+
+.zoom-layer-container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  z-index: 1;
+}
+
+.zoom-fade-old,
+.zoom-fade-new {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-repeat: no-repeat;
+  background-size: contain; /* หรือ cover แล้วระวังตัดขอบ */
+  background-position: bottom center; /* ดึงแปลงผักมาล่าง */
+  background-attachment: scroll;
+}
+
+/* Old one fades out */
+.zoom-fade-old {
+  transition: transform 2s ease-in-out, opacity 2s ease-in-out, filter 2s ease-in-out;
+  transform: scale(1);
+  opacity: 1;
+  z-index: 2;
+  will-change: transform;
+}
+
+.zoom-fade-old.hide {
+  transform: scale(1.05);
+  opacity: 0;
+  filter: blur(3px);
+}
+
+/* .zoom-fade-new {
+  opacity: 0;
+  transition: opacity 1.5s ease-in-out;
+  position: absolute;
+  top: 0;
+  left: 0;
+    background-size: contain;
+  background-repeat: no-repeat;
+
+} */
+
+.zoom-fade-new {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-repeat: no-repeat;
+  background-size: contain; /* หรือ cover แล้วดูผล */
+  background-position: bottom center; /* ดึงภาพให้ชิดล่าง */
+  background-attachment: scroll;
+  opacity: 0;
+  transition: opacity 1.5s ease-in-out;
+}
+
+.zoom-fade-new.show {
+  opacity: 1;
+}
+
+.home {
+ position: fixed;
+ left: 38%;
+bottom: -5%;
+transform: scale(0.4);
+z-index:9;
+cursor:pointer;
+
+}
+.house {
+  /* position: relative;
+  display: inline-block;
+  perspective: 800px; ให้มีมิติ */
+
+   position: fixed;
+ left: 38%;
+bottom: -5%;
+transform: scale(0.4);
+z-index:9;
+cursor:pointer;
+}
+
+.house-body {
+  display: block;
+  width: 800px; /* แล้วแต่ขนาดบ้าน */
+
+  
+}
+
+.house-door {
+  position: absolute;
+  bottom: 40px;  /* ปรับให้ประตูตรงช่อง */
+  left: 180px;
+  width: 60px;   /* ขนาดประตู */
+  height: auto;
+  transform-origin: left center; /* จุดหมุน: บานพับด้านซ้าย */
+  transition: transform 0.5s ease;
+}
+
+.house-door.open {
+  transform: rotateY(-100deg); /* หมุนออก */
+}
+
+.swing-wrapper {
+  position: relative;
+  width: 250px;  /* ปรับตามขนาดรูป */
+    z-index: 9;
+    left: 6%;
+  bottom: -35%;  /* ปรับให้ที่นั่งอยู่ตรงจุดที่ต้องการ */
+}
+
+.swing-frame {
+  width: 100%;
+  display: block;
+ 
+}
+
+
+.swing-seat {
+  width: 250px;  /* ปรับตามขนาดรูปเก้าอี้ */
+    transform: translateX(-50%) scale(1.25);
+}
+.seat-wrapper {
+  position: absolute;
+  left: 75%;
+  bottom: 40%;
+  width: 100px;
+  z-index: 9;
+  transform-origin: top center;
+  transform: translateX(-50%) scale(1.25) rotate(0deg); /* 👈 ใส่ rotate(0deg) ตอนปกติ */
+}
+
+.swing-wrapper:hover .seat-wrapper {
+  animation: swing-rotate 1s ease-in-out infinite alternate;
+}
+
+@keyframes swing-rotate {
+  0%   { transform: translateX(-50%) scale(1.25) rotate(3deg); }
+  100% { transform: translateX(-50%) scale(1.25) rotate(-5deg); }
+}
+
+.swing-seat {
+  width: 100%; /* ให้พอดีกับ .seat-wrapper */
+}
+
+
+.dialog-box {
+  position: fixed;
+  bottom: 80px; /* หรือ top: ขึ้นอยู่กับวางไว้ตรงไหน */
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: white;
+  border: 2px solid #333;
+  border-radius: 12px;
+  padding: 12px 20px;
+  max-width: 300px;
+  font-family: 'Kanit', sans-serif;
+  font-size: 1rem;
+  animation: fadeInUp 0.5s ease;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  z-index: 9;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 20px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+.cute-button {
+  background-color: #ffd6e0;
+  border: 2px solid #ff8fab;
+  border-radius: 12px;
+  color: #5c0032;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-family: 'Kanit', sans-serif;
+  cursor: pointer;
+  box-shadow: 0 4px 0 #ff8fab;
+  transition: all 0.2s ease;
+}
+
+.cute-button:hover {
+  background-color: #ffc2d1;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 0 #ff8fab;
+}
+
+.cute-button:active {
+  transform: translateY(2px);
+  box-shadow: 0 2px 0 #ff8fab;
+}

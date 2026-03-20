@@ -37,7 +37,11 @@ const skills = [
 ];
 
 const projects = [
- 
+ {
+  title: "Thailand Election System",
+  tech: "C# (.NET Framework 4.0), WinForms application running as an API provider for the Graphic Viz Engine",
+    desc: "Developed the Thailand Election 2026 API by integrating data from the official Election Commission of Thailand (ECT) API, delivering real-time results to a custom Graphic Viz Engine for TV broadcasting."
+} ,
 {
   title: "Database Migration Tool",
   tech: "C#, .NET WinForms, Oracle, SQL Server, MySQL",
@@ -56,7 +60,7 @@ const projects = [
 {
   title: "Election US API",
   tech: "C# (.NET Framework 4.0), WinForms application running as an API provider for the Graphic Viz Engine",
-  desc: "Developed the U.S. Election 2024 API by integrating data from AP News, delivering real-time results to a custom Graphic Viz Engine."
+  desc: "Developed the U.S. Election 2024 API by integrating data from AP News, delivering real-time results to a custom Graphic Viz Engine  for  TV broadcasting."
 },{
   title: "Free SIM Online Registration",
   tech: "C# .net Framework MVC, Co-operated with Rabbit LINE Pay (LINE Company)",

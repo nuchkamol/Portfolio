@@ -1,4 +1,4 @@
-import cv from "../docs/CV 2025.pdf";
+import cv from "../docs/CV-2026.pdf";
 
 function Resume() {
   return (

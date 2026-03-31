@@ -12,11 +12,11 @@ export default function Navbar() {
 
   const handleMenuClick = (e, sectionId) => {
     e.preventDefault();
-    if (location.pathname === "/home") {
+    if (location.pathname === "/") {
       const section = document.getElementById(sectionId);
       if (section) section.scrollIntoView({ behavior: "smooth" });
     } else {
-      navigate(`/home?scrollTo=${sectionId}`);
+      navigate(`/?scrollTo=${sectionId}`);
     }
 
     // เพิ่ม fade-out animation ตอนปิด
@@ -108,6 +108,9 @@ export default function Navbar() {
         </li>
         <li>
           <Link to="/cv" onClick={() => toggleMenu()}>CV</Link>
+        </li>
+          <li>
+          <Link to="/story" onClick={() => toggleMenu()}>Story</Link>
         </li>
       </ul>
     </nav>

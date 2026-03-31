@@ -22,14 +22,14 @@ function App() {
 
       <Routes>
         {/* Route สำหรับหน้าหลัก - นี่คือส่วนที่กำหนดให้ Home.js เป็น default page */}
-        <Route path="/home" element={<Profile />} />
+        <Route path="/" element={<Profile />} />
         <Route path="/work" element={<Work />} />
         <Route path="/unity" element={<Unity />} />
         <Route path="/cv" element={<Resume />} />
         <Route path="/project/:categoryId" element={<ProjectDetail />} /> 
          {/* <Route path="/project/:id" element={<Gallery />} /> */}
         {/* Route สำหรับหน้าเกี่ยวกับเรา */}
-       <Route path="/" element={
+       <Route path="/story" element={
           <GameWrapper>
             <Home />
           </GameWrapper>

@@ -101,11 +101,11 @@ export default function Navbar() {
             Contact
           </a>
         </li>
-        <li>
+        {/* <li>
           <a href="#My3D" onClick={(e) => handleMenuClick(e, "creator")}>
             My3D
           </a>
-        </li>
+        </li> */}
         <li>
           <Link to="/cv" onClick={() => toggleMenu()}>CV</Link>
         </li>

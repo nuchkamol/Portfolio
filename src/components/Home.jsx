@@ -522,7 +522,7 @@ const animalCenterY = animal.yPercent * containerHeight;
 setTargetCenter({ x: animalCenterX, y: animalCenterY }); // ❗ ใส่เพิ่ม
   if(animal.name == "resume"){
     const link = document.createElement("a");
-    link.href = "/Doc/Nuchkamol Nutaman CV.pdf"; // ใส่ URL ของไฟล์
+    link.href = "https://nuchkamol.github.io/Doc/Resume2026.pdf"; // ใส่ URL ของไฟล์
     link.download = "NuchkamolNutaman.pdf";    // ชื่อไฟล์ที่ดาวน์โหลด
     link.click();
   }else if(animal.name == "door"){

@@ -1,4 +1,4 @@
-import cv from "../docs/CV-2026.pdf";
+
 
 function Resume() {
   return (
@@ -24,7 +24,7 @@ function Resume() {
               
                 {/* ปรับ style ของ embed */}
                 <embed
-                    src={cv}
+                    src="/Doc/CV_2026.pdf"
                     type="application/pdf"
                     frameBorder="0"
                     scrolling="auto"

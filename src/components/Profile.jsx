@@ -324,7 +324,7 @@ const startDrag = (e) => {
     </div> 
         </section> */}
 
-    <section className="creator-section" id="creator">
+    {/* <section className="creator-section" id="creator">
           <div className="resume-section-content">
             <h2 className="mb-5">3D created by me</h2>
             <div className="creators-embed-wrapper">
@@ -365,7 +365,7 @@ const startDrag = (e) => {
               </p>
             </div>
           </div>
-        </section>
+        </section> */}
 
 {/* 
 
